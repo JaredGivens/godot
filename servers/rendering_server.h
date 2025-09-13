@@ -448,6 +448,7 @@ public:
 	virtual RID multimesh_create() = 0;
 
 	enum MultimeshTransformFormat {
+		MULTIMESH_TRANSFORM_NONE,
 		MULTIMESH_TRANSFORM_2D,
 		MULTIMESH_TRANSFORM_3D,
 	};

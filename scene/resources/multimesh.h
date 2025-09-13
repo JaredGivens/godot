@@ -40,6 +40,7 @@ class MultiMesh : public Resource {
 
 public:
 	enum TransformFormat {
+		TRANSFORM_NONE = RS::MULTIMESH_TRANSFORM_NONE,
 		TRANSFORM_2D = RS::MULTIMESH_TRANSFORM_2D,
 		TRANSFORM_3D = RS::MULTIMESH_TRANSFORM_3D
 	};
