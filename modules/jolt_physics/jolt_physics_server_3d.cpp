@@ -36,6 +36,7 @@
 #include "joints/jolt_joint_3d.h"
 #include "joints/jolt_pin_joint_3d.h"
 #include "joints/jolt_slider_joint_3d.h"
+#include "modules/shardscape/jolt_chunk_shape_3d.h"
 #include "objects/jolt_area_3d.h"
 #include "objects/jolt_body_3d.h"
 #include "objects/jolt_soft_body_3d.h"
@@ -129,6 +130,13 @@ RID JoltPhysicsServer3D::heightmap_shape_create() {
 
 RID JoltPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V_MSG(RID(), "Custom shapes are not supported.");
+}
+
+RID JoltPhysicsServer3D::face_chunk_shape_create() {
+	JoltShape3D *shape = memnew(JoltFaceChunkShape3D);
+	RID rid = shape_owner.make_rid(shape);
+	shape->set_rid(rid);
+	return rid;
 }
 
 void JoltPhysicsServer3D::shape_set_data(RID p_shape, const Variant &p_data) {

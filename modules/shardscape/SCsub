@@ -1,0 +1,14 @@
+# SCsub
+
+Import('env')
+env_ssk = env.Clone()
+env_ssk.Append(CPPPATH=["#thirdparty/jolt_physics/"]) 
+env_ssk.Append(CPPPATH=["#modules/jolt_physics/"]) 
+
+src_list = [
+    "faces.cc", 
+    "jolt_face_chunk_shape_3d.cc", 
+    "FaceChunkShape.cc", 
+    "register_types.cc"
+]
+env_ssk.add_source_files(env_ssk.modules_sources, src_list) 

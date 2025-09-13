@@ -101,7 +101,9 @@ RID GodotPhysicsServer3D::heightmap_shape_create() {
 RID GodotPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V(RID());
 }
-
+RID GodotPhysicsServer3D::face_chunk_shape_create() {
+	ERR_FAIL_V(RID());
+}
 void GodotPhysicsServer3D::shape_set_data(RID p_shape, const Variant &p_data) {
 	GodotShape3D *shape = shape_owner.get_or_null(p_shape);
 	ERR_FAIL_NULL(shape);
