@@ -49,6 +49,7 @@
 #include "shapes/jolt_separation_ray_shape_3d.h"
 #include "shapes/jolt_sphere_shape_3d.h"
 #include "shapes/jolt_world_boundary_shape_3d.h"
+#include "shapes/jolt_quad_chunk_shape_3d.h"
 #include "spaces/jolt_job_system.h"
 #include "spaces/jolt_physics_direct_space_state_3d.h"
 #include "spaces/jolt_space_3d.h"
@@ -129,6 +130,13 @@ RID JoltPhysicsServer3D::heightmap_shape_create() {
 
 RID JoltPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V_MSG(RID(), "Custom shapes are not supported.");
+}
+
+RID JoltPhysicsServer3D::quad_chunk_shape_create() {
+	JoltShape3D *shape = memnew(JoltQuadChunkShape3D);
+	RID rid = shape_owner.make_rid(shape);
+	shape->set_rid(rid);
+	return rid;
 }
 
 void JoltPhysicsServer3D::shape_set_data(RID p_shape, const Variant &p_data) {

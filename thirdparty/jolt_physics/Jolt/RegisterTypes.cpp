@@ -26,6 +26,7 @@
 #include <Jolt/Physics/Collision/Shape/MutableCompoundShape.h>
 #include <Jolt/Physics/Collision/Shape/StaticCompoundShape.h>
 #include <Jolt/Physics/Collision/Shape/EmptyShape.h>
+#include <Jolt/Physics/Collision/Shape/QuadChunkShape.h>
 #include <Jolt/Physics/Collision/PhysicsMaterialSimple.h>
 #include <Jolt/Physics/SoftBody/SoftBodyShape.h>
 
@@ -129,6 +130,7 @@ void RegisterTypesInternal(uint64 inVersionID)
 	OffsetCenterOfMassShape::sRegister();
 	ScaledShape::sRegister();
 	EmptyShape::sRegister();
+	QuadChunkShape::sRegister();
 
 	// Create list of all types
 	const RTTI *types[] = {
@@ -180,7 +182,8 @@ void RegisterTypesInternal(uint64 inVersionID)
 		JPH_RTTI(GroupFilter),
 		JPH_RTTI(GroupFilterTable),
 		JPH_RTTI(BodyCreationSettings),
-		JPH_RTTI(SoftBodyCreationSettings)
+		JPH_RTTI(SoftBodyCreationSettings),
+		JPH_RTTI(QuadChunkShapeSettings),
 	};
 
 	// Register them all

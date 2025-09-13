@@ -52,7 +52,7 @@
 		</method>
 	</methods>
 	<members>
-		<member name="map_data" type="PackedFloat32Array" setter="set_map_data" getter="get_map_data" default="PackedFloat32Array(0, 0, 0, 0)">
+		<member name="map_data" type="PackedFloat64Array" setter="set_map_data" getter="get_map_data" default="PackedFloat64Array(0, 0, 0, 0)">
 			Heightmap data. The array's size must be equal to [member map_width] multiplied by [member map_depth].
 		</member>
 		<member name="map_depth" type="int" setter="set_map_depth" getter="get_map_depth" default="2">

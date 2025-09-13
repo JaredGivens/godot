@@ -393,14 +393,17 @@ bool JoltPhysicsDirectSpaceState3D::_body_motion_collide(const JoltBody3D &p_bod
 }
 
 int JoltPhysicsDirectSpaceState3D::_try_get_face_index(const JPH::Body &p_body, const JPH::SubShapeID &p_sub_shape_id) {
-	if (!JoltProjectSettings::enable_ray_cast_face_index) {
-		return -1;
-	}
 
 	const JPH::Shape *root_shape = p_body.GetShape();
 	JPH::SubShapeID sub_shape_id_remainder;
 	const JPH::Shape *leaf_shape = root_shape->GetLeafShape(p_sub_shape_id, sub_shape_id_remainder);
 
+	if (leaf_shape->GetType() == JPH::EShapeType::User3) {
+		return sub_shape_id_remainder.GetValue();
+	}
+	if (!JoltProjectSettings::enable_ray_cast_face_index) {
+		return -1;
+	}
 	if (leaf_shape->GetType() != JPH::EShapeType::Mesh) {
 		return -1;
 	}

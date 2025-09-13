@@ -93,6 +93,7 @@ thirdparty_sources = [
     "Jolt/Physics/Collision/Shape/TaperedCapsuleShape.cpp",
     "Jolt/Physics/Collision/Shape/TaperedCylinderShape.cpp",
     "Jolt/Physics/Collision/Shape/TriangleShape.cpp",
+    "Jolt/Physics/Collision/Shape/QuadChunkShape.cpp",
     "Jolt/Physics/Constraints/ConeConstraint.cpp",
     "Jolt/Physics/Constraints/Constraint.cpp",
     "Jolt/Physics/Constraints/ConstraintManager.cpp",

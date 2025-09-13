@@ -990,6 +990,11 @@
 				Sets a pin joint parameter.
 			</description>
 		</method>
+		<method name="quad_chunk_shape_create">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
 		<method name="separation_ray_shape_create">
 			<return type="RID" />
 			<description>

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <Jolt/Physics/Collision/Shape/ScaleHelpers.h>
 #include <Jolt/Physics/Collision/CollideSoftBodyVertexIterator.h>
 #include <Jolt/Geometry/ClosestPoint.h>
 

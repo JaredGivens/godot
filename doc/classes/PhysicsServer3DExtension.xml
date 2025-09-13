@@ -911,6 +911,11 @@
 			<description>
 			</description>
 		</method>
+		<method name="_quad_chunk_shape_create" qualifiers="virtual required">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
 		<method name="_separation_ray_shape_create" qualifiers="virtual required">
 			<return type="RID" />
 			<description>

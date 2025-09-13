@@ -1,0 +1,21 @@
+# SCsub
+
+Import('env')
+env_ssk = env.Clone()
+env_ssk.Append(CPPPATH=["#thirdparty/jolt_physics/"])
+
+# Add include paths
+env_ssk.Append(CPPPATH=['#../FastNoise2/include'])
+
+is_debug = env['debug_symbols']
+fndir = '#../FastNoise2/build/Debug/Debug/lib/' if is_debug else '#../FastNoise2/build/Release/Release/lib/'
+fnlib = 'FastNoiseD' if is_debug else 'FastNoise'
+# Define the path to the static library
+env.Append(LIBS=[fnlib])  # name without the 'lib' prefix or '.a'
+env.Append(LIBPATH=[fndir])  # where libmylib.a is
+
+src_list = [
+    "QuadChunk.cpp",
+    "register_types.cpp"
+]
+env_ssk.add_source_files(env_ssk.modules_sources, src_list)

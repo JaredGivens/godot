@@ -689,6 +689,8 @@ RID PhysicsServer3D::shape_create(ShapeType p_shape) {
 			return heightmap_shape_create();
 		case SHAPE_CUSTOM:
 			return custom_shape_create();
+		case SHAPE_FACE_CHUNK:
+			return quad_chunk_shape_create();
 		default:
 			return RID();
 	}
@@ -707,6 +709,7 @@ void PhysicsServer3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("concave_polygon_shape_create"), &PhysicsServer3D::concave_polygon_shape_create);
 	ClassDB::bind_method(D_METHOD("heightmap_shape_create"), &PhysicsServer3D::heightmap_shape_create);
 	ClassDB::bind_method(D_METHOD("custom_shape_create"), &PhysicsServer3D::custom_shape_create);
+	ClassDB::bind_method(D_METHOD("quad_chunk_shape_create"), &PhysicsServer3D::quad_chunk_shape_create);
 
 	ClassDB::bind_method(D_METHOD("shape_set_data", "shape", "data"), &PhysicsServer3D::shape_set_data);
 	ClassDB::bind_method(D_METHOD("shape_set_margin", "shape", "margin"), &PhysicsServer3D::shape_set_margin);

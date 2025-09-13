@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="FastNoise" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="delete_node_ref">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="from_encoded_node_tree">
+			<return type="void" />
+			<param index="0" name="encodedString" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="from_metadata">
+			<return type="void" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="simdLevel" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_position_array_2d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="count" type="int" />
+			<param index="1" name="xPosArray" type="PackedFloat32Array" />
+			<param index="2" name="yPosArray" type="PackedFloat32Array" />
+			<param index="3" name="xOffset" type="float" />
+			<param index="4" name="yOffset" type="float" />
+			<param index="5" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_position_array_3d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="count" type="int" />
+			<param index="1" name="xPosArray" type="PackedFloat32Array" />
+			<param index="2" name="yPosArray" type="PackedFloat32Array" />
+			<param index="3" name="zPosArray" type="PackedFloat32Array" />
+			<param index="4" name="xOffset" type="float" />
+			<param index="5" name="yOffset" type="float" />
+			<param index="6" name="zOffset" type="float" />
+			<param index="7" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_position_array_4d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="count" type="int" />
+			<param index="1" name="xPosArray" type="PackedFloat32Array" />
+			<param index="2" name="yPosArray" type="PackedFloat32Array" />
+			<param index="3" name="zPosArray" type="PackedFloat32Array" />
+			<param index="4" name="wPosArray" type="PackedFloat32Array" />
+			<param index="5" name="xOffset" type="float" />
+			<param index="6" name="yOffset" type="float" />
+			<param index="7" name="zOffset" type="float" />
+			<param index="8" name="wOffset" type="float" />
+			<param index="9" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_single_2d">
+			<return type="float" />
+			<param index="0" name="x" type="float" />
+			<param index="1" name="y" type="float" />
+			<param index="2" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_single_3d">
+			<return type="float" />
+			<param index="0" name="x" type="float" />
+			<param index="1" name="y" type="float" />
+			<param index="2" name="z" type="float" />
+			<param index="3" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_single_4d">
+			<return type="float" />
+			<param index="0" name="x" type="float" />
+			<param index="1" name="y" type="float" />
+			<param index="2" name="z" type="float" />
+			<param index="3" name="w" type="float" />
+			<param index="4" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_tileable_2d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="xSize" type="int" />
+			<param index="1" name="ySize" type="int" />
+			<param index="2" name="frequency" type="float" />
+			<param index="3" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_uniform_grid_2d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="xStart" type="int" />
+			<param index="1" name="yStart" type="int" />
+			<param index="2" name="xSize" type="int" />
+			<param index="3" name="ySize" type="int" />
+			<param index="4" name="frequency" type="float" />
+			<param index="5" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_uniform_grid_3d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="xStart" type="int" />
+			<param index="1" name="yStart" type="int" />
+			<param index="2" name="zStart" type="int" />
+			<param index="3" name="xSize" type="int" />
+			<param index="4" name="ySize" type="int" />
+			<param index="5" name="zSize" type="int" />
+			<param index="6" name="frequency" type="float" />
+			<param index="7" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gen_uniform_grid_4d">
+			<return type="PackedFloat32Array" />
+			<param index="0" name="xStart" type="int" />
+			<param index="1" name="yStart" type="int" />
+			<param index="2" name="zStart" type="int" />
+			<param index="3" name="wStart" type="int" />
+			<param index="4" name="xSize" type="int" />
+			<param index="5" name="ySize" type="int" />
+			<param index="6" name="zSize" type="int" />
+			<param index="7" name="wSize" type="int" />
+			<param index="8" name="frequency" type="float" />
+			<param index="9" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_enum_count">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="variableIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_enum_name">
+			<return type="String" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="variableIndex" type="int" />
+			<param index="2" name="enumIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_hybrid_count">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_hybrid_dimension_idx">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="hybridIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_hybrid_name">
+			<return type="String" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="hybridIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_id">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_name">
+			<return type="String" />
+			<param index="0" name="id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_node_lookup_count">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_node_lookup_dimension_idx">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="nodeLookupIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_node_lookup_name">
+			<return type="String" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="nodeLookupIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_variable_count">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_variable_dimension_idx">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="variableIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_variable_name">
+			<return type="String" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="variableIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_metadata_variable_type">
+			<return type="int" />
+			<param index="0" name="id" type="int" />
+			<param index="1" name="variableIndex" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_simd_level">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_hybrid_float">
+			<return type="bool" />
+			<param index="0" name="hybridIndex" type="int" />
+			<param index="1" name="value" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_variable_float">
+			<return type="bool" />
+			<param index="0" name="variableIndex" type="int" />
+			<param index="1" name="value" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_variable_int_enum">
+			<return type="bool" />
+			<param index="0" name="variableIndex" type="int" />
+			<param index="1" name="value" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>
