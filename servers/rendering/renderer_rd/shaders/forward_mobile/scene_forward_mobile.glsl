@@ -368,6 +368,7 @@ void vertex_shader(in vec3 vertex,
 #endif
 		//transpose
 		instance_matrix = transpose(instance_matrix);
+#if !defined(INSTANCE_MATRIX_USED)
 #if !defined(USE_DOUBLE_PRECISION) || defined(SKIP_TRANSFORM_USED) || defined(VERTEX_WORLD_COORDS_USED) || defined(MODEL_MATRIX_USED)
 		// Normally we can bake the multimesh transform into the model matrix, but when using double precision
 		// we avoid baking it in so we can emulate high precision.
@@ -377,6 +378,7 @@ void vertex_shader(in vec3 vertex,
 #endif // !defined(USE_DOUBLE_PRECISION) || defined(SKIP_TRANSFORM_USED) || defined(VERTEX_WORLD_COORDS_USED)
 #endif // !defined(USE_DOUBLE_PRECISION) || defined(SKIP_TRANSFORM_USED) || defined(VERTEX_WORLD_COORDS_USED) || defined(MODEL_MATRIX_USED)
 		model_normal_matrix = model_normal_matrix * mat3(instance_matrix);
+#endif // !defined(INSTANCE_MATRIX_USED)
 	}
 
 #ifdef UV_USED
@@ -443,12 +445,14 @@ void vertex_shader(in vec3 vertex,
 	// Then we combine the translations from the model matrix and the view matrix using emulated doubles.
 	// We add the result to the vertex and ignore the final lost precision.
 	vec3 model_origin = model_matrix[3].xyz;
+#if !defined(INSTANCE_MATRIX_USED)
 	if (sc_multimesh()) {
 		modelview = modelview * transform_matrix;
 
 		vec3 instance_origin = mat3(model_matrix) * instance_matrix[3].xyz;
 		model_origin = double_add_vec3(model_origin, model_precision, instance_origin, vec3(0.0), model_precision);
 	}
+#endif	
 
 	// Overwrite the translation part of modelview with improved precision.
 	vec3 temp_precision; // Will be ignored.

@@ -1818,6 +1818,7 @@ RendererCanvasRenderRD::RendererCanvasRenderRD() {
 		actions.renames["sdf_to_screen_uv"] = "sdf_to_screen_uv";
 		actions.renames["screen_uv_to_sdf"] = "screen_uv_to_sdf";
 
+		actions.usage_defines["INSTANCE_MATRIX"] = "#define INSTANCE_MATRIX_USED\n";
 		actions.usage_defines["COLOR"] = "#define COLOR_USED\n";
 		actions.usage_defines["SCREEN_UV"] = "#define SCREEN_UV_USED\n";
 		actions.usage_defines["SCREEN_PIXEL_SIZE"] = "@SCREEN_UV";

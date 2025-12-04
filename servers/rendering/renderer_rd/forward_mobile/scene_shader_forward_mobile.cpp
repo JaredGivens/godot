@@ -779,6 +779,7 @@ void SceneShaderForwardMobile::init(const String p_defines) {
 		actions.usage_defines["IRRADIANCE"] = "#define CUSTOM_IRRADIANCE_USED\n";
 
 		actions.usage_defines["MODEL_MATRIX"] = "#define MODEL_MATRIX_USED\n";
+		actions.usage_defines["INSTANCE_MATRIX"] = "#define INSTANCE_MATRIX_USED\n";
 
 		actions.usage_defines["POINT_SIZE"] = "#define POINT_SIZE_USED\n";
 		actions.usage_defines["POINT_COORD"] = "#define POINT_COORD_USED\n";
