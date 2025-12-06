@@ -2153,6 +2153,16 @@ Color MeshStorage::_multimesh_instance_get_custom_data(RID p_multimesh, int p_in
 	return c;
 }
 
+void MeshStorage::_multimesh_update_buffer(RID p_multimesh, const float *p_buffer) {
+	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
+	ERR_FAIL_NULL(multimesh);
+
+	int32_t size = multimesh->instances * (int)multimesh->stride_cache;
+	int32_t instance_offset = multimesh->motion_vectors_current_offset + multimesh->instance_offset;
+	RD::get_singleton()->buffer_update(multimesh->buffer, instance_offset * multimesh->stride_cache * sizeof(float), size * sizeof(float), p_buffer);
+	multimesh->buffer_set = true;
+}
+
 void MeshStorage::_multimesh_set_buffer(RID p_multimesh, const Vector<float> &p_buffer) {
 	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
 	ERR_FAIL_NULL(multimesh);

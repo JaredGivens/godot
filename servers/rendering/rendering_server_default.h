@@ -417,6 +417,7 @@ public:
 	FUNC2RC(Color, multimesh_instance_get_custom_data, RID, int)
 
 	FUNC2(multimesh_set_buffer, RID, const Vector<float> &)
+	FUNC2(multimesh_update_buffer, RID, const float *)
 	FUNC1RC(RID, multimesh_get_command_buffer_rd_rid, RID)
 	FUNC1RC(RID, multimesh_get_buffer_rd_rid, RID)
 	FUNC1RC(Vector<float>, multimesh_get_buffer, RID)

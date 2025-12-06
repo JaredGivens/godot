@@ -12,7 +12,7 @@ protected:
     static void _bind_methods();
 
 public:
-    static constexpr int32_t SIZE_1D = 4;
+    static constexpr int32_t SIZE_1D = 16;
     static constexpr int32_t SIZE_2D = SIZE_1D * SIZE_1D;
     static constexpr int32_t SIZE_3D = SIZE_2D * SIZE_1D;
 
@@ -20,8 +20,7 @@ public:
 
     Ref<QuadChunk> get_quad_chunk(int chunki) const { return quad_chunks_[chunki]; }
     RID get_ssbo() const { return ssbo_; }
-    Vector<float> get_buffer() const { return static_cast<Vector<float>>(buffer_); }
-    Vector<float> get_slice(int chunki) const;
+    void update_multimesh(RID multimesh, int chunki) const;
 
 private:
 	RID ssbo_;

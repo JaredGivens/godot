@@ -4,7 +4,7 @@
 #include "core/object/class_db.h"
 #include "core/templates/local_vector.h"
 #include "core/variant/variant.h"
-#include "vector3u5.h"
+#include "vector3u4.h"
 #include <cfloat>
 #include <limits>
 
@@ -38,7 +38,7 @@ void QuadChunk::set_vert(int32_t hexi, int32_t verti, Vector3i pos) {
 	hex->pos[verti].z = pos.z & 31;
 }
 
-void QuadChunk::set_quad(int32_t hexi, int32_t quadi, QuadState state, int16_t tx) {
+void QuadChunk::set_quad(int32_t hexi, int32_t quadi, QuadState state, int32_t tx) {
 	auto hex = hexes() + hexi;
 	auto ss = quadi * QUAD_STATE_SHIFT;
 	count_ += (state != QUAD_STATE_DISABLED) - (((hex->states >> ss) & QUAD_STATE_MASK) != QUAD_STATE_DISABLED);
@@ -54,9 +54,9 @@ int QuadChunk::get_tri(int32_t hexi, int32_t trii, float *outFloats) const {
     if (state == QUAD_STATE_DISABLED) {
         return 1;
     }
-    auto v3u5 = Vector3u5(hexi);
+    auto v3u4 = Vector3u4(hexi);
 
-    auto v0 = Vector3i(v3u5.x, v3u5.y, v3u5.z);
+    auto v0 = Vector3i(v3u4.x, v3u4.y, v3u4.z);
     auto v1 = Vector3i(quadi == 1, quadi == 2, quadi == 0);
     auto v2 = Vector3i(quadi == 2, quadi == 0, quadi == 1);
     v1 += float(~trii & 1) * v2;
@@ -100,13 +100,13 @@ int QuadChunk::get_tri(int32_t hexi, int32_t trii, float *outFloats) const {
 	return 0;
 }
 
-Vector<int32_t> QuadChunk::get_block(int32_t hexi, int32_t trii) const {
+Vector<int32_t> QuadChunk::get_quad(int32_t hexi, int32_t trii) const {
     Hex const * hex0 = hexes() + hexi;
     int32_t quadi = trii >> 1;
     int32_t state = (hex0->states >> (quadi * 2)) & 3;
-    auto v3u5 = Vector3u5(hexi);
+    auto v3u4 = Vector3u4(hexi);
 
-    auto v0 = Vector3i(v3u5.x, v3u5.y, v3u5.z);
+    auto v0 = Vector3i(v3u4.x, v3u4.y, v3u4.z);
     auto v1 = Vector3i(quadi == 1, quadi == 2, quadi == 0);
     auto v2 = Vector3i(quadi == 2, quadi == 0, quadi == 1);
     auto v3 = Vector3i(quadi == 2, quadi == 0, quadi == 1);
@@ -136,9 +136,8 @@ Vector<int32_t> QuadChunk::get_block(int32_t hexi, int32_t trii) const {
     auto vt3 = v3 * 24 + Vector3i(hex0->pos[i3].x, hex0->pos[i3].y, hex0->pos[i3].z);
 
     auto diff = (state & QUAD_STATE_OUTSIDE) - 1;
-	v3u5.try_add(quadi, diff);
 	LocalVector<int32_t> result;
-    result.resize(26);
+    result.resize(14);
 	result[0] = state;
 	result[1] = hex0->textures[quadi];
 	result[2] = vt0.x;
@@ -153,41 +152,6 @@ Vector<int32_t> QuadChunk::get_block(int32_t hexi, int32_t trii) const {
 	result[11] = vt3.x;
 	result[12] = vt3.y;
 	result[13] = vt3.z;
-	result[14] = std::numeric_limits<int32_t>::max();
-
-	if(v3u5.invalid) {
-        return Vector<int32_t>(result);
-	}
-
-    auto hex1 = hexes() + v3u5.packed;
-    v0[quadi] += diff;
-    v1[quadi] += diff;
-    v2[quadi] += diff;
-    v3[quadi] += diff;
-    Vector3i tmp = v1;
-    v1 = v2;
-    v2 = tmp;
-    i1 ^= i2;
-    i2 ^= i1;
-    i1 ^= i2;
-
-    auto vt4 = v0 * 24 + Vector3i(hex1->pos[00].x, hex1->pos[00].y, hex1->pos[00].z);
-    auto vt5 = v1 * 24 + Vector3i(hex1->pos[i1].x, hex1->pos[i1].y, hex1->pos[i1].z);
-    auto vt6 = v2 * 24 + Vector3i(hex1->pos[i2].x, hex1->pos[i2].y, hex1->pos[i2].z);
-    auto vt7 = v3 * 24 + Vector3i(hex1->pos[i3].x, hex1->pos[i3].y, hex1->pos[i3].z);
-
-	result[14] = vt4.x;
-	result[15] = vt4.y;
-	result[16] = vt4.z;
-	result[17] = vt5.x;
-	result[18] = vt5.y;
-	result[19] = vt5.z;
-	result[20] = vt6.x;
-	result[21] = vt6.y;
-	result[22] = vt6.z;
-	result[23] = vt7.x;
-	result[24] = vt7.y;
-	result[25] = vt7.z;
-	return  Vector<int32_t>(result);
+    return result;
 }
 } //namespace SSK

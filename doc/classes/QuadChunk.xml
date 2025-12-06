@@ -43,11 +43,11 @@
 		</method>
 	</methods>
 	<constants>
-		<constant name="SIZE_1D" value="32">
+		<constant name="SIZE_1D" value="16">
 		</constant>
-		<constant name="SIZE_2D" value="1024">
+		<constant name="SIZE_2D" value="256">
 		</constant>
-		<constant name="SIZE_3D" value="32768">
+		<constant name="SIZE_3D" value="4096">
 		</constant>
 		<constant name="QUAD_STATE_DISABLED" value="0" enum="QuadState">
 		</constant>

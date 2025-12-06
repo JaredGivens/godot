@@ -545,6 +545,7 @@ public:
 	virtual Color _multimesh_instance_get_color(RID p_multimesh, int p_index) const override;
 	virtual Color _multimesh_instance_get_custom_data(RID p_multimesh, int p_index) const override;
 	virtual void _multimesh_set_buffer(RID p_multimesh, const Vector<float> &p_buffer) override;
+	virtual void _multimesh_update_buffer(RID p_multimesh, const float *p_ptr) override {}
 	virtual RID _multimesh_get_command_buffer_rd_rid(RID p_multimesh) const override;
 	virtual RID _multimesh_get_buffer_rd_rid(RID p_multimesh) const override;
 	virtual Vector<float> _multimesh_get_buffer(RID p_multimesh) const override;

@@ -257,6 +257,10 @@ Color RendererMeshStorage::multimesh_instance_get_custom_data(RID p_multimesh, i
 	return _multimesh_instance_get_custom_data(p_multimesh, p_index);
 }
 
+void RendererMeshStorage::multimesh_update_buffer(RID p_multimesh, const float *p_buffer) {
+	_multimesh_update_buffer(p_multimesh, p_buffer);
+}
+
 void RendererMeshStorage::multimesh_set_buffer(RID p_multimesh, const Vector<float> &p_buffer) {
 	MultiMeshInterpolator *mmi = _multimesh_get_interpolator(p_multimesh);
 	if (mmi && mmi->interpolated) {

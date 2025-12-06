@@ -7,19 +7,8 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="get_buffer" qualifiers="const">
-			<return type="PackedFloat32Array" />
-			<description>
-			</description>
-		</method>
 		<method name="get_quad_chunk" qualifiers="const">
 			<return type="QuadChunk" />
-			<param index="0" name="chunki" type="int" />
-			<description>
-			</description>
-		</method>
-		<method name="get_slice" qualifiers="const">
-			<return type="PackedFloat32Array" />
 			<param index="0" name="chunki" type="int" />
 			<description>
 			</description>
@@ -29,13 +18,20 @@
 			<description>
 			</description>
 		</method>
+		<method name="update_multimesh" qualifiers="const">
+			<return type="void" />
+			<param index="0" name="multimesh" type="RID" />
+			<param index="1" name="chunki" type="int" />
+			<description>
+			</description>
+		</method>
 	</methods>
 	<constants>
-		<constant name="SIZE_1D" value="4">
+		<constant name="SIZE_1D" value="16">
 		</constant>
-		<constant name="SIZE_2D" value="16">
+		<constant name="SIZE_2D" value="256">
 		</constant>
-		<constant name="SIZE_3D" value="64">
+		<constant name="SIZE_3D" value="4096">
 		</constant>
 	</constants>
 </class>

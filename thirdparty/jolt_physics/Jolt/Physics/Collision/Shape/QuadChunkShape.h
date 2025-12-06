@@ -32,7 +32,7 @@ public:
 
 	virtual bool MustBeStatic() const override { return true; }
 	// See Shape::GetLocalBounds
-	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk::SIZE_1D + 2)); }
+	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk::SIZE_1D + 3)); }
 	// See Shape::GetSubShapeIDBitsRecursive
 	virtual uint GetSubShapeIDBitsRecursive() const override { return cSubShapeIDBits; }
 	// See Shape::GetInnerRadius
@@ -95,7 +95,7 @@ private:
 	inline SubShapeID EncodeSubShapeID(const SubShapeIDCreator &inCreator, uint inQuad, uint inTriangle) const;
 	inline void DecodeSubShapeID(const SubShapeID &inSubShapeID, uint &outQuad, uint &outTriangle) const;
 
-	static constexpr uint cSubShapeIDBits = 18; // 15 bits for 32 * 32 * 32 hexes and 3 for tri
+	static constexpr uint cSubShapeIDBits = 15; // 15 bits for 32 * 32 * 32 hexes and 3 for tri
 };
 
 JPH_NAMESPACE_END

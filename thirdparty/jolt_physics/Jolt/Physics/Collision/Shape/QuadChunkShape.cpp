@@ -1,6 +1,6 @@
 #include "QuadChunkShape.h"
 #include "modules/shardscape/QuadChunk.h"
-#include "modules/shardscape/vector3u5.h"
+#include "modules/shardscape/vector3u4.h"
 
 #include <Jolt/AABBTree/AABBTreeBuilder.h>
 #include <Jolt/AABBTree/AABBTreeToBuffer.h>
@@ -143,7 +143,7 @@ const PhysicsMaterial *QuadChunkShape::GetMaterial(const SubShapeID &inSubShapeI
 }
 
 SubShapeID QuadChunkShape::EncodeSubShapeID(const SubShapeIDCreator &inCreator, uint32_t inHex, uint32_t inTriangle) const {
-	return inCreator.PushID(inHex | inTriangle << 15, cSubShapeIDBits).GetID();
+	return inCreator.PushID(inHex | inTriangle << 12, cSubShapeIDBits).GetID();
 }
 // returns 0 on success and 1 on fail
 int QuadChunkShape::DecodeTriangle(uint32_t inHexi, uint32_t inTrii, Vec3 outVerts[3]) const {
@@ -164,8 +164,8 @@ void QuadChunkShape::DecodeSubShapeID(const SubShapeID &inSubShapeID, uint32_t &
 	uint32_t id = inSubShapeID.PopID(cSubShapeIDBits, remainder);
 	JPH_ASSERT(remainder.IsEmpty(), "Invalid subshape ID");
 
-	outTriangle = id >> 15;
-	outHex = id & ((1 << 15) - 1);
+	outTriangle = id >> 12;
+	outHex = id & ((1 << 12) - 1);
 }
 
 Vec3 QuadChunkShape::GetSurfaceNormal(const SubShapeID &inSubShapeID, Vec3Arg inLocalSurfacePosition) const {
@@ -211,22 +211,22 @@ void QuadChunkShape::GetSupportingFace(const SubShapeID &inSubShapeID, Vec3Arg i
 }
 
 template <typename Visitor>
-void VisitCellT(Visitor &ioVisitor, int32_t xyz) {
+void VisitStarT(Visitor &ioVisitor, int32_t xyz) {
 	for (int32_t i = 0; i < 12; ++i) {
 		auto ax = i >> 2;
-		auto v3u5 = Vector3u5(xyz);
-		v3u5.try_add(~ax & 1, -((~i >> 0) & 1));
-		v3u5.try_add(~ax & 2, -((~i >> 1) & 1));
-		if (v3u5.is_invalid()) {
+		auto v3u4 = Vector3u4(xyz);
+		v3u4.try_add(~ax & 1, -((~i >> 0) & 1));
+		v3u4.try_add(~ax & 2, -((~i >> 1) & 1));
+		if (v3u4.is_invalid()) {
 			continue;
 		}
-		auto hex = ioVisitor.mShape->mQuadChunk->hexes() + v3u5.packed;
+		auto hex = ioVisitor.mShape->mQuadChunk->hexes() + v3u4.packed;
 		auto state = (hex->states >> (QC::QUAD_STATE_SHIFT * ax)) & QC::QUAD_STATE_MASK;
 		if (state == QC::QUAD_STATE_DISABLED) {
 			continue;
 		}
-		ioVisitor.VisitTriangle(v3u5.packed, ax * 2);
-		ioVisitor.VisitTriangle(v3u5.packed, ax * 2 + 1);
+		ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
+		ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
 	}
 }
 
@@ -238,16 +238,21 @@ void QuadChunkShape::Draw(DebugRenderer *inRenderer, RMat44Arg inCenterOfMassTra
 
 class DecodingContext {
 public:
-	static constexpr uint32_t cNumBitsXYZ = 5; // 5 bits each for x, y, z (32 blocks per dimension)
+	static constexpr uint32_t cNumBitsXYZ = 4; // 4 bits each for x, y, z (32 blocks per dimension)
 	static constexpr uint32_t cMaskBitsXYZ = (1 << cNumBitsXYZ) - 1;
-	static constexpr uint32_t cLevelShift = 3 * cNumBitsXYZ; // 15 bits total for xyz
-	static constexpr uint32_t cMaxLevel = 5; // Max subdivision levels log2(32)
+	static constexpr uint32_t cLevelShift = 3 * cNumBitsXYZ; // 12 bits total for xyz
 
-	JPH_INLINE explicit DecodingContext() :
-			mTop(0) {
-
+	JPH_INLINE explicit DecodingContext() : mTop(7) {
 		// Initialize stack with root block (level 0, x=0, y=0, z=0)
-		mPropertiesStack[0] = 0;
+		for (uint32_t i = 0; i < 8; ++i) {
+			int32_t offset_x = ((i >> 0) & 1) * (QC::SIZE_1D >> 1);
+			int32_t offset_y = ((i >> 1) & 1) * (QC::SIZE_1D >> 1);
+			int32_t offset_z = ((i >> 2) & 1) * (QC::SIZE_1D >> 1);
+			mPropertiesStack[i] = (1 << cLevelShift)
+				| (offset_z << (cNumBitsXYZ * 2))
+				| (offset_y << (cNumBitsXYZ * 1))
+				| (offset_x << (cNumBitsXYZ * 0));
+		}
 	}
 
 	template <class Visitor>
@@ -263,9 +268,9 @@ public:
 			uint32_t properties = mPropertiesStack[mTop];
 			uint32_t xyz = properties & ((1 << cLevelShift) - 1); // Extract xyz from properties
 			uint32_t level = properties >> cLevelShift;
-			if (level == cMaxLevel) {
+			if (level == cNumBitsXYZ) {
 				// Leaf node: Process faces in this block
-				VisitCellT(ioVisitor, xyz);
+				VisitStarT(ioVisitor, xyz);
 			} else {
 				// Non-leaf node: Subdivide and push child blocks
 				ProcessBranchBlock(ioVisitor, xyz, level);
@@ -350,7 +355,7 @@ template <typename Visitor>
 void CastRayT(Visitor &ioVisitor) {
 	JPH_PROFILE_FUNCTION();
 	auto minBounds = Vec3::sReplicate(0);
-	auto maxBounds = Vec3::sReplicate(31.99);
+	auto maxBounds = Vec3::sReplicate(QC::SIZE_1D - 0.01);
 	Vec3 rayOrigin = ioVisitor.mRayOrigin;
 	Vec3 rayDir = ioVisitor.mRayDirection;
 	auto rayInvDir = RayInvDirection(rayDir);
@@ -360,14 +365,14 @@ void CastRayT(Visitor &ioVisitor) {
 	}
 
 	auto end = rayOrigin + rayDir;
-	auto endV3u5 = Vector3u5(floor(end.GetX()), floor(end.GetY()), floor(end.GetZ()));
+	auto end_v3u4 = Vector3u4(floor(end.GetX()), floor(end.GetY()), floor(end.GetZ()));
 	Vec3 startPos = rayOrigin;
 	if (distance > 0) {
 		startPos += rayDir * distance;
 	}
 
 	UVec4 startPosU = startPos.ToInt();
-	Vector3u5 xyz(startPosU.GetX(), startPosU.GetY(), startPosU.GetZ());
+	Vector3u4 xyz(startPosU.GetX(), startPosU.GetY(), startPosU.GetZ());
 
 	Vec3 step =  rayDir.GetSign();
 	// get the fractional portions of the float of the starting position
@@ -379,12 +384,12 @@ void CastRayT(Visitor &ioVisitor) {
 
 	// step through vert grid and check attached vert stars(cell)
 	while (!xyz.is_invalid()) {
-		VisitCellT(ioVisitor, xyz.packed);
+		VisitStarT(ioVisitor, xyz.packed);
 		if (ioVisitor.ShouldAbort()) {
 			break;
 		}
 		auto ax = tMax[0] < tMax[1] && tMax[0] < tMax[2] ? 0 : (tMax[1] < tMax[2] ? 1 : 2);
-		if (endV3u5.packed == xyz.packed) {
+		if (end_v3u4.packed == xyz.packed) {
 			break;
 		}
 		xyz.try_add(ax, step[ax]);
@@ -515,8 +520,8 @@ void QuadChunkShape::CollideSoftBodyVertices(Mat44Arg inCenterOfMassTransform, V
 					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
 					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2));
 			Vec4 dist_sq1 = AABox4DistanceSqToPoint(mLocalPosition,
-					inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2));
+					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
+					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2));
 
 			float dist_sq[8]{
 				dist_sq0.GetX(), dist_sq0.GetY(), dist_sq0.GetZ(), dist_sq0.GetW(),

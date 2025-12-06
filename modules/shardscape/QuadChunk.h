@@ -35,7 +35,7 @@ protected:
 	static void _bind_methods();
 
 public:
-	static constexpr int32_t SIZE_1D = 32;
+	static constexpr int32_t SIZE_1D = 16;
 	static constexpr int32_t SIZE_2D = SIZE_1D * SIZE_1D;
 	static constexpr int32_t SIZE_3D = SIZE_2D * SIZE_1D;
 	enum QuadState {
@@ -53,9 +53,9 @@ public:
 	int32_t get_count() const { return count_; };
 	PackedInt64Array get_addr() const { return { static_cast<int64_t>(reinterpret_cast<intptr_t>(this)) }; }
 	void set_vert(int32_t hexi, int32_t verti, Vector3i vert);
-	void set_quad(int32_t hexi, int32_t quadi, QuadState state, int16_t tx);
+	void set_quad(int32_t hexi, int32_t quadi, QuadState state, int32_t tx);
 	int get_tri(int32_t hexi, int32_t trii, float *verts) const;
-	PackedInt32Array get_block(int32_t hexi, int32_t trii) const;
+	PackedInt32Array get_quad(int32_t hexi, int32_t trii) const;
 };
 } //namespace SSK
 

@@ -21,9 +21,9 @@ ChunkAtlas::ChunkAtlas() {
     }
 }
 
-Vector<float> ChunkAtlas::get_slice(int chunki) const {
+void ChunkAtlas::update_multimesh(RID multimesh, int chunki) const {
     int32_t o = (chunki * CHUNK_SIZE);
-	return static_cast<Vector<float>>(buffer_).slice(o, o +CHUNK_SIZE);
+	RS::get_singleton()->multimesh_update_buffer(multimesh, buffer_.ptr() + o);
 }
 
 void ChunkAtlas::_bind_methods() {
@@ -31,9 +31,8 @@ void ChunkAtlas::_bind_methods() {
 	BIND_CONSTANT(SIZE_2D)
 	BIND_CONSTANT(SIZE_3D)
     ClassDB::bind_method(D_METHOD("get_quad_chunk", "chunki"), &ChunkAtlas::get_quad_chunk);
-    ClassDB::bind_method(D_METHOD("get_buffer"), &ChunkAtlas::get_buffer);
     ClassDB::bind_method(D_METHOD("get_ssbo"), &ChunkAtlas::get_ssbo);
-    ClassDB::bind_method(D_METHOD("get_slice", "chunki"), &ChunkAtlas::get_slice);
+    ClassDB::bind_method(D_METHOD("update_multimesh", "multimesh", "chunki"), &ChunkAtlas::update_multimesh);
 }
 
 } // namespace SSK
