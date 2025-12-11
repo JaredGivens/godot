@@ -2518,6 +2518,7 @@ void RenderingServer::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("multimesh_create"), &RenderingServer::multimesh_create);
 	ClassDB::bind_method(D_METHOD("multimesh_allocate_data", "multimesh", "instances", "transform_format", "color_format", "custom_data_format", "use_indirect"), &RenderingServer::multimesh_allocate_data, DEFVAL(false), DEFVAL(false), DEFVAL(false));
+	ClassDB::bind_method(D_METHOD("multimesh_set_data", "multimesh", "buffer", "instances", "transform_format", "color_format", "custom_data_format", "use_indirect"), &RenderingServer::multimesh_set_data, DEFVAL(false), DEFVAL(false), DEFVAL(false));
 	ClassDB::bind_method(D_METHOD("multimesh_get_instance_count", "multimesh"), &RenderingServer::multimesh_get_instance_count);
 	ClassDB::bind_method(D_METHOD("multimesh_set_mesh", "multimesh", "mesh"), &RenderingServer::multimesh_set_mesh);
 	ClassDB::bind_method(D_METHOD("multimesh_instance_set_transform", "multimesh", "index", "transform"), &RenderingServer::multimesh_instance_set_transform);
@@ -2534,6 +2535,8 @@ void RenderingServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("multimesh_instance_get_custom_data", "multimesh", "index"), &RenderingServer::multimesh_instance_get_custom_data);
 	ClassDB::bind_method(D_METHOD("multimesh_set_visible_instances", "multimesh", "visible"), &RenderingServer::multimesh_set_visible_instances);
 	ClassDB::bind_method(D_METHOD("multimesh_get_visible_instances", "multimesh"), &RenderingServer::multimesh_get_visible_instances);
+	ClassDB::bind_method(D_METHOD("multimesh_set_instance_offset", "multimesh", "offset"), &RenderingServer::multimesh_set_instance_offset);
+	ClassDB::bind_method(D_METHOD("multimesh_get_instance_offset", "multimesh"), &RenderingServer::multimesh_get_instance_offset);
 	ClassDB::bind_method(D_METHOD("multimesh_set_buffer", "multimesh", "buffer"), &RenderingServer::multimesh_set_buffer);
 	ClassDB::bind_method(D_METHOD("multimesh_get_command_buffer_rd_rid", "multimesh"), &RenderingServer::multimesh_get_command_buffer_rd_rid);
 	ClassDB::bind_method(D_METHOD("multimesh_get_buffer_rd_rid", "multimesh"), &RenderingServer::multimesh_get_buffer_rd_rid);

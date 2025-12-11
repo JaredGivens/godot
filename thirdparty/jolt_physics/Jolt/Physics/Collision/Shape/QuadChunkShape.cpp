@@ -300,7 +300,7 @@ private:
 		int32_t y = (xyz >> (cNumBitsXYZ * 1)) & cMaskBitsXYZ;
 		int32_t z = (xyz >> (cNumBitsXYZ * 2)) & cMaskBitsXYZ;
 		// Calculate block size at this level
-		int32_t block_size = SSK::SIZE_1D >> (level + 1);
+		int32_t block_size = QC::SIZE_1D >> (level + 1);
 
 		// Calculate base position
 		Vec3 base_pos = Vec3(x, y, z);

@@ -71,6 +71,29 @@ void RendererMeshStorage::multimesh_allocate_data(RID p_multimesh, int p_instanc
 	_multimesh_allocate_data(p_multimesh, p_instances, p_transform_format, p_use_colors, p_use_custom_data, p_use_indirect);
 }
 
+void RendererMeshStorage::multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors, bool p_use_custom_data, bool p_use_indirect) {
+	MultiMeshInterpolator *mmi = _multimesh_get_interpolator(p_multimesh);
+	if (mmi) {
+		mmi->_transform_format = p_transform_format;
+		mmi->_use_colors = p_use_colors;
+		mmi->_use_custom_data = p_use_custom_data;
+		mmi->_num_instances = p_instances;
+
+		mmi->_vf_size_xform = p_transform_format == RS::MULTIMESH_TRANSFORM_2D ? 8 : 12;
+		mmi->_vf_size_color = p_use_colors ? 4 : 0;
+		mmi->_vf_size_data = p_use_custom_data ? 4 : 0;
+
+		mmi->_stride = mmi->_vf_size_xform + mmi->_vf_size_color + mmi->_vf_size_data;
+
+		int size_in_floats = p_instances * mmi->_stride;
+		mmi->_data_curr.resize_initialized(size_in_floats);
+		mmi->_data_prev.resize_initialized(size_in_floats);
+		mmi->_data_interpolated.resize_initialized(size_in_floats);
+	}
+
+	_multimesh_set_data(p_multimesh, p_buffer, p_instances, p_transform_format, p_use_colors, p_use_custom_data, p_use_indirect);
+}
+
 int RendererMeshStorage::multimesh_get_instance_count(RID p_multimesh) const {
 	return _multimesh_get_instance_count(p_multimesh);
 }
@@ -346,6 +369,14 @@ void RendererMeshStorage::multimesh_set_visible_instances(RID p_multimesh, int p
 
 int RendererMeshStorage::multimesh_get_visible_instances(RID p_multimesh) const {
 	return _multimesh_get_visible_instances(p_multimesh);
+}
+
+void RendererMeshStorage::multimesh_set_instance_offset(RID p_multimesh, int p_offset) {
+	return _multimesh_set_instance_offset(p_multimesh, p_offset);
+}
+
+int RendererMeshStorage::multimesh_get_instance_offset(RID p_multimesh) const {
+	return _multimesh_get_instance_offset(p_multimesh);
 }
 
 AABB RendererMeshStorage::multimesh_get_aabb(RID p_multimesh) {

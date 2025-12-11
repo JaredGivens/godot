@@ -232,9 +232,11 @@ private:
 		bool uses_colors = false;
 		bool uses_custom_data = false;
 		int visible_instances = -1;
+		uint32_t instance_offset = 0;
 		AABB aabb;
 		AABB custom_aabb;
 		bool aabb_dirty = false;
+		bool data_set = false;
 		bool buffer_set = false;
 		bool indirect = false;
 		bool motion_vectors_enabled = false;
@@ -658,6 +660,7 @@ public:
 	virtual void _multimesh_free(RID p_rid) override;
 
 	virtual void _multimesh_allocate_data(RID p_multimesh, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) override;
+	virtual void _multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) override;
 	virtual int _multimesh_get_instance_count(RID p_multimesh) const override;
 
 	virtual void _multimesh_set_mesh(RID p_multimesh, RID p_mesh) override;
@@ -680,6 +683,9 @@ public:
 
 	virtual void _multimesh_set_visible_instances(RID p_multimesh, int p_visible) override;
 	virtual int _multimesh_get_visible_instances(RID p_multimesh) const override;
+
+	virtual void _multimesh_set_instance_offset(RID p_multimesh, int p_offset) override;
+	virtual int _multimesh_get_instance_offset(RID p_multimesh) const override;
 
 	virtual void _multimesh_set_custom_aabb(RID p_multimesh, const AABB &p_aabb) override;
 	virtual AABB _multimesh_get_custom_aabb(RID p_multimesh) const override;
@@ -724,6 +730,12 @@ public:
 			return multimesh->visible_instances;
 		}
 		return multimesh->instances;
+	}
+
+	_FORCE_INLINE_ uint32_t multimesh_get_first_instance(RID p_multimesh) const {
+		MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
+		ERR_FAIL_NULL_V(multimesh, 0);
+		return multimesh->instance_offset;
 	}
 
 	_FORCE_INLINE_ RID multimesh_get_3d_uniform_set(RID p_multimesh, RID p_shader, uint32_t p_set) const {

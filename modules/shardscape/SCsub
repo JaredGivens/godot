@@ -15,6 +15,7 @@ env.Append(LIBS=[fnlib])  # name without the 'lib' prefix or '.a'
 env.Append(LIBPATH=[fndir])  # where libmylib.a is
 
 src_list = [
+    "ChunkAtlas.cpp",
     "QuadChunk.cpp",
     "register_types.cpp"
 ]

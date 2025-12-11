@@ -57,6 +57,7 @@ private:
 	bool use_custom_data = false;
 	int instance_count = 0;
 	int visible_instance_count = -1;
+	int instance_offset = 0;
 	PhysicsInterpolationQuality _physics_interpolation_quality = INTERP_QUALITY_FAST;
 
 protected:
@@ -99,6 +100,9 @@ public:
 
 	void set_visible_instance_count(int p_count);
 	int get_visible_instance_count() const;
+
+	void set_instance_offset(int p_count);
+	int get_instance_offset() const;
 
 	void set_physics_interpolation_quality(PhysicsInterpolationQuality p_quality);
 	PhysicsInterpolationQuality get_physics_interpolation_quality() const { return _physics_interpolation_quality; }

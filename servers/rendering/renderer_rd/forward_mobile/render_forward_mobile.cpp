@@ -2953,6 +2953,7 @@ void RenderForwardMobile::_geometry_instance_update(RenderGeometryInstance *p_ge
 				}
 
 				ginstance->instance_count = mesh_storage->multimesh_get_instances_to_draw(ginstance->data->base);
+				ginstance->instance_count = mesh_storage->multimesh_get_first_instance(ginstance->data->base);
 			}
 
 		} break;
@@ -3343,6 +3344,7 @@ void RenderForwardMobile::_geometry_instance_dependency_changed(Dependency::Depe
 			GeometryInstanceForwardMobile *ginstance = static_cast<GeometryInstanceForwardMobile *>(p_tracker->userdata);
 			if (ginstance->data->base_type == RS::INSTANCE_MULTIMESH) {
 				ginstance->instance_count = RendererRD::MeshStorage::get_singleton()->multimesh_get_instances_to_draw(ginstance->data->base);
+				ginstance->instance_offset = RendererRD::MeshStorage::get_singleton()->multimesh_get_instance_offset(ginstance->data->base);
 			}
 		} break;
 		default: {

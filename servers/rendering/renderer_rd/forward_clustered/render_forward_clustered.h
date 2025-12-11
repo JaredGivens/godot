@@ -559,6 +559,7 @@ private:
 		bool store_transform_cache = true;
 		RID transforms_uniform_set;
 		uint32_t instance_count = 0;
+		uint32_t instance_offset = 0;
 		uint32_t trail_steps = 1;
 		bool can_sdfgi = false;
 		bool using_projectors = false;

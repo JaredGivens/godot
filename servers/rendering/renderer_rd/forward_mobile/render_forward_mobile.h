@@ -529,6 +529,7 @@ protected:
 		bool use_soft_shadow = false;
 		bool store_transform_cache = true; // If true we copy our transform into our per-draw buffer, if false we use our transforms UBO and clear our per-draw transform.
 		uint32_t instance_count = 0;
+		uint32_t instance_offset = 0;
 		uint32_t trail_steps = 1;
 
 		uint64_t prev_transform_change_frame = UINT_MAX;

@@ -249,6 +249,17 @@ int MultiMesh::get_visible_instance_count() const {
 	return visible_instance_count;
 }
 
+void MultiMesh::set_instance_offset(int p_offset) {
+	ERR_FAIL_COND(p_offset < 0);
+	ERR_FAIL_COND(p_offset > instance_count - 1);
+	RenderingServer::get_singleton()->multimesh_set_instance_offset(multimesh, p_offset);
+	instance_count = p_offset;
+}
+
+int MultiMesh::get_instance_offset() const {
+	return instance_offset;
+}
+
 void MultiMesh::set_physics_interpolation_quality(PhysicsInterpolationQuality p_quality) {
 	_physics_interpolation_quality = p_quality;
 	RenderingServer::get_singleton()->multimesh_set_physics_interpolation_quality(multimesh, (RS::MultimeshPhysicsInterpolationQuality)p_quality);

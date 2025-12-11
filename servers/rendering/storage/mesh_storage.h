@@ -124,6 +124,7 @@ public:
 	virtual void multimesh_free(RID p_rid);
 
 	virtual void multimesh_allocate_data(RID p_multimesh, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false);
+	virtual void multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false);
 
 	virtual int multimesh_get_instance_count(RID p_multimesh) const;
 
@@ -157,6 +158,9 @@ public:
 	virtual void multimesh_set_visible_instances(RID p_multimesh, int p_visible);
 	virtual int multimesh_get_visible_instances(RID p_multimesh) const;
 
+	virtual void multimesh_set_instance_offset(RID p_multimesh, int p_offset);
+	virtual int multimesh_get_instance_offset(RID p_multimesh) const;
+
 	virtual AABB multimesh_get_aabb(RID p_multimesh);
 
 	virtual RID _multimesh_allocate() = 0;
@@ -164,6 +168,7 @@ public:
 	virtual void _multimesh_free(RID p_rid) = 0;
 
 	virtual void _multimesh_allocate_data(RID p_multimesh, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) = 0;
+	virtual void _multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) = 0;
 
 	virtual int _multimesh_get_instance_count(RID p_multimesh) const = 0;
 
@@ -190,6 +195,9 @@ public:
 
 	virtual void _multimesh_set_visible_instances(RID p_multimesh, int p_visible) = 0;
 	virtual int _multimesh_get_visible_instances(RID p_multimesh) const = 0;
+
+	virtual void _multimesh_set_instance_offset(RID p_multimesh, int p_offset) = 0;
+	virtual int _multimesh_get_instance_offset(RID p_multimesh) const = 0;
 
 	virtual AABB _multimesh_get_aabb(RID p_multimesh) = 0;
 

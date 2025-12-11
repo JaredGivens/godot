@@ -526,6 +526,7 @@ public:
 	virtual void _multimesh_initialize(RID p_rid) override;
 	virtual void _multimesh_free(RID p_rid) override;
 	virtual void _multimesh_allocate_data(RID p_multimesh, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) override;
+	virtual void _multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, RS::MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) override {}
 	virtual int _multimesh_get_instance_count(RID p_multimesh) const override;
 
 	virtual void _multimesh_set_mesh(RID p_multimesh, RID p_mesh) override;
@@ -550,6 +551,9 @@ public:
 
 	virtual void _multimesh_set_visible_instances(RID p_multimesh, int p_visible) override;
 	virtual int _multimesh_get_visible_instances(RID p_multimesh) const override;
+
+	virtual void _multimesh_set_instance_offset(RID p_multimesh, int p_instance_offset) override {}
+	virtual int _multimesh_get_instance_offset(RID p_multimesh) const override { return 0; }
 
 	virtual MultiMeshInterpolator *_multimesh_get_interpolator(RID p_multimesh) const override;
 
@@ -584,6 +588,8 @@ public:
 		}
 		return multimesh->instances;
 	}
+
+	_FORCE_INLINE_ uint32_t multimesh_get_first_instance(RID p_multimesh) const { return 0; }
 
 	_FORCE_INLINE_ GLuint multimesh_get_gl_buffer(RID p_multimesh) const {
 		MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);

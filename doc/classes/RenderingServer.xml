@@ -2697,6 +2697,12 @@
 				Returns the number of instances allocated for this multimesh.
 			</description>
 		</method>
+		<method name="multimesh_get_instance_offset" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="multimesh" type="RID" />
+			<description>
+			</description>
+		</method>
 		<method name="multimesh_get_mesh" qualifiers="const">
 			<return type="RID" />
 			<param index="0" name="multimesh" type="RID" />
@@ -2836,6 +2842,25 @@
 			<param index="1" name="aabb" type="AABB" />
 			<description>
 				Sets the custom AABB for this MultiMesh resource.
+			</description>
+		</method>
+		<method name="multimesh_set_data">
+			<return type="void" />
+			<param index="0" name="multimesh" type="RID" />
+			<param index="1" name="buffer" type="RID" />
+			<param index="2" name="instances" type="int" />
+			<param index="3" name="transform_format" type="int" enum="RenderingServer.MultimeshTransformFormat" />
+			<param index="4" name="color_format" type="bool" default="false" />
+			<param index="5" name="custom_data_format" type="bool" default="false" />
+			<param index="6" name="use_indirect" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="multimesh_set_instance_offset">
+			<return type="void" />
+			<param index="0" name="multimesh" type="RID" />
+			<param index="1" name="offset" type="int" />
+			<description>
 			</description>
 		</method>
 		<method name="multimesh_set_mesh">

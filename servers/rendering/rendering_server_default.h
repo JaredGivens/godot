@@ -396,6 +396,7 @@ public:
 	FUNCRIDSPLIT(multimesh)
 
 	FUNC6(multimesh_allocate_data, RID, int, MultimeshTransformFormat, bool, bool, bool)
+	FUNC7(multimesh_set_data, RID, RID, int, MultimeshTransformFormat, bool, bool, bool)
 	FUNC1RC(int, multimesh_get_instance_count, RID)
 
 	FUNC2(multimesh_set_mesh, RID, RID)
@@ -428,6 +429,9 @@ public:
 
 	FUNC2(multimesh_set_visible_instances, RID, int)
 	FUNC1RC(int, multimesh_get_visible_instances, RID)
+
+	FUNC2(multimesh_set_instance_offset, RID, int)
+	FUNC1RC(int, multimesh_get_instance_offset, RID)
 
 	/* SKELETON API */
 

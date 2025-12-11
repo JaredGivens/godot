@@ -5,6 +5,7 @@
 #include "core/templates/local_vector.h"
 #include "core/variant/variant.h"
 #include "vector3u5.h"
+#include <cfloat>
 #include <limits>
 
 namespace SSK {
@@ -17,14 +18,13 @@ void QuadChunk::_bind_methods() {
 	BIND_ENUM_CONSTANT(QUAD_STATE_OUTSIDE)
 	ClassDB::bind_method(D_METHOD("get_count"), &QuadChunk::get_count);
 	ClassDB::bind_method(D_METHOD("get_addr"), &QuadChunk::get_addr);
-	ClassDB::bind_method(D_METHOD("get_buffer"), &QuadChunk::get_buffer);
 	ClassDB::bind_method(D_METHOD("set_vert", "verti", "position"), &QuadChunk::set_vert);
 	ClassDB::bind_method(D_METHOD("set_quad", "hexi", "state", "texture"), &QuadChunk::set_quad);
 	ClassDB::bind_method(D_METHOD("get_block", "hexi", "trii"), &QuadChunk::get_block);
 }
 
-QuadChunk::QuadChunk() : buffer_()  {
-	buffer_.resize_initialized(SIZE_3D * 8);
+void QuadChunk::set_buffer(float *buffer)  {
+	buffer_ = buffer;
 	auto hex = hexes();
 	for (int32_t i = 0; i < SIZE_3D; ++i){
 		hex[i].index = i;

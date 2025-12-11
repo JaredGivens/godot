@@ -4,12 +4,14 @@
 
 #include "core/object/class_db.h"
 #include "QuadChunk.h"
+#include "ChunkAtlas.h"
 #include "FastNoise.h"
 
 void initialize_shardscape_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
+	ClassDB::register_class<SSK::ChunkAtlas>();
 	ClassDB::register_class<SSK::QuadChunk>();
 	ClassDB::register_class<SSK::FastNoise>();
 }

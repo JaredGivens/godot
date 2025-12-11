@@ -1385,7 +1385,7 @@ public:
 	void draw_list_set_line_width(DrawListID p_list, float p_width);
 	void draw_list_set_push_constant(DrawListID p_list, const void *p_data, uint32_t p_data_size);
 
-	void draw_list_draw(DrawListID p_list, bool p_use_indices, uint32_t p_instances = 1, uint32_t p_procedural_vertices = 0);
+	void draw_list_draw(DrawListID p_list, bool p_use_indices, uint32_t p_instances = 1, uint32_t p_procedural_vertices = 0, uint32_t p_instance_offset = 0);
 	void draw_list_draw_indirect(DrawListID p_list, bool p_use_indices, RID p_buffer, uint32_t p_offset = 0, uint32_t p_draw_count = 1, uint32_t p_stride = 0);
 
 	void draw_list_set_viewport(DrawListID p_list, const Rect2 &p_rect);

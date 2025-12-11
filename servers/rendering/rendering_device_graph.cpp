@@ -886,7 +886,7 @@ void RenderingDeviceGraph::_run_draw_list_command(RDD::CommandBufferID p_command
 			} break;
 			case DrawListInstruction::TYPE_DRAW: {
 				const DrawListDrawInstruction *draw_instruction = reinterpret_cast<const DrawListDrawInstruction *>(instruction);
-				driver->command_render_draw(p_command_buffer, draw_instruction->vertex_count, draw_instruction->instance_count, 0, 0);
+				driver->command_render_draw(p_command_buffer, draw_instruction->vertex_count, draw_instruction->instance_count, 0, draw_instruction->instance_offset);
 				instruction_data_cursor += sizeof(DrawListDrawInstruction);
 			} break;
 			case DrawListInstruction::TYPE_DRAW_INDEXED: {
@@ -1911,11 +1911,12 @@ void RenderingDeviceGraph::add_draw_list_clear_attachments(VectorView<RDD::Attac
 	}
 }
 
-void RenderingDeviceGraph::add_draw_list_draw(uint32_t p_vertex_count, uint32_t p_instance_count) {
+void RenderingDeviceGraph::add_draw_list_draw(uint32_t p_vertex_count, uint32_t p_instance_count, uint32_t p_instance_offset) {
 	DrawListDrawInstruction *instruction = reinterpret_cast<DrawListDrawInstruction *>(_allocate_draw_list_instruction(sizeof(DrawListDrawInstruction)));
 	instruction->type = DrawListInstruction::TYPE_DRAW;
 	instruction->vertex_count = p_vertex_count;
 	instruction->instance_count = p_instance_count;
+	instruction->instance_offset = p_instance_offset;
 }
 
 void RenderingDeviceGraph::add_draw_list_draw_indexed(uint32_t p_index_count, uint32_t p_instance_count, uint32_t p_first_index) {

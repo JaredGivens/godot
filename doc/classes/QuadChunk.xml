@@ -19,11 +19,6 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_buffer" qualifiers="const">
-			<return type="PackedFloat32Array" />
-			<description>
-			</description>
-		</method>
 		<method name="get_count" qualifiers="const">
 			<return type="int" />
 			<description>

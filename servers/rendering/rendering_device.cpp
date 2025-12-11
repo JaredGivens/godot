@@ -4959,7 +4959,7 @@ void RenderingDevice::draw_list_set_push_constant(DrawListID p_list, const void 
 #endif
 }
 
-void RenderingDevice::draw_list_draw(DrawListID p_list, bool p_use_indices, uint32_t p_instances, uint32_t p_procedural_vertices) {
+void RenderingDevice::draw_list_draw(DrawListID p_list, bool p_use_indices, uint32_t p_instances, uint32_t p_procedural_vertices, uint32_t p_instance_offset) {
 	ERR_RENDER_THREAD_GUARD();
 
 	ERR_FAIL_COND(!draw_list.active);
@@ -5114,7 +5114,7 @@ void RenderingDevice::draw_list_draw(DrawListID p_list, bool p_use_indices, uint
 				"Vertex amount (" + itos(to_draw) + ") must be a multiple of the amount of vertices required by the render primitive (" + itos(draw_list.validation.pipeline_primitive_divisor) + ").");
 #endif
 
-		draw_graph.add_draw_list_draw(to_draw, p_instances);
+		draw_graph.add_draw_list_draw(to_draw, p_instances, p_instance_offset);
 	}
 
 	draw_list.state.draw_count++;

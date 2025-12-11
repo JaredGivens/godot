@@ -485,6 +485,7 @@ protected:
 #endif
 public:
 	virtual void multimesh_allocate_data(RID p_multimesh, int p_instances, MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) = 0;
+	virtual void multimesh_set_data(RID p_multimesh, RID p_buffer, int p_instances, MultimeshTransformFormat p_transform_format, bool p_use_colors = false, bool p_use_custom_data = false, bool p_use_indirect = false) = 0;
 	virtual int multimesh_get_instance_count(RID p_multimesh) const = 0;
 
 	virtual void multimesh_set_mesh(RID p_multimesh, RID p_mesh) = 0;
@@ -518,6 +519,9 @@ public:
 
 	virtual void multimesh_set_visible_instances(RID p_multimesh, int p_visible) = 0;
 	virtual int multimesh_get_visible_instances(RID p_multimesh) const = 0;
+
+	virtual void multimesh_set_instance_offset(RID p_multimesh, int p_offset) = 0;
+	virtual int multimesh_get_instance_offset(RID p_multimesh) const = 0;
 
 	/* SKELETON API */
 
