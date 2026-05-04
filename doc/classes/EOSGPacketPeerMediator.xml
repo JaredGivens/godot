@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGPacketPeerMediator" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_connection_request_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_packet_count_for_socket">
+			<return type="int" />
+			<param index="0" name="socket_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_packet_count_from_remote_user">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<param index="1" name="_unnamed_arg1" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_queue_size_limit">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_sockets">
+			<return type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="get_total_packet_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="has_socket">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_queue_size_limit">
+			<return type="void" />
+			<param index="0" name="limit" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="connection_request_received">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connection_request_removed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="packet_queue_full">
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

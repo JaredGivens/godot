@@ -1,6 +1,7 @@
 #pragma once
-#include "QuadChunk.h"
+#include "QuadChunk16.h"
 #include <core/object/ref_counted.h>
+#include <servers/rendering/rendering_device.h>
 
 namespace SSK {
 
@@ -17,15 +18,17 @@ public:
     static constexpr int32_t SIZE_3D = SIZE_2D * SIZE_1D;
 
     ChunkAtlas();
+    ~ChunkAtlas();
 
-    Ref<QuadChunk> get_quad_chunk(int chunki) const { return quad_chunks_[chunki]; }
-    RID get_ssbo() const { return ssbo_; }
-    void update_multimesh(RID multimesh, int chunki) const;
+    Ref<QuadChunk16> get_quad_chunk(int chunki) const;
+    RID get_texture() const ;
+	void update_chunk(int chunki);
 
 private:
-	RID ssbo_;
-    LocalVector<float> buffer_;
-    LocalVector<Ref<QuadChunk>> quad_chunks_;
+	RID texture_;
+    LocalVector<uint8_t> layer_arrays_[SIZE_1D];
+    LocalVector<Ref<QuadChunk16>> quad_chunks_;
 };
+
 
 } // namespace SSK

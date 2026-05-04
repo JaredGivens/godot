@@ -13,7 +13,7 @@
 			</description>
 		</method>
 		<method name="from_encoded_node_tree">
-			<return type="void" />
+			<return type="int" />
 			<param index="0" name="encodedString" type="String" />
 			<description>
 			</description>

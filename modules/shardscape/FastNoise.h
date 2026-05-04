@@ -9,9 +9,10 @@ class FastNoise : public RefCounted {
     GDCLASS(FastNoise, RefCounted);
 
 public:
-	// Node creation and management
-    void from_encoded_node_tree(String encodedString) {
+    // Node creation and management
+    int from_encoded_node_tree(String encodedString) {
         node_ = fnNewFromEncodedNodeTree(encodedString.ascii().ptr(), 0);
+		return node_ == nullptr;
     }
 
     void delete_node_ref() {
@@ -90,10 +91,10 @@ public:
     }
 
     String get_metadata_name(int id) {
-		return String(fnGetMetadataName(id));
+        return String(fnGetMetadataName(id));
     }
 
-	void from_metadata(int id, unsigned simdLevel) {
+    void from_metadata(int id, unsigned simdLevel) {
         node_ = fnNewFromMetadata(id, simdLevel);
     }
 
@@ -103,7 +104,7 @@ public:
     }
 
     String get_metadata_variable_name(int id, int variableIndex) {
-		return String(fnGetMetadataVariableName(id, variableIndex));
+        return String(fnGetMetadataVariableName(id, variableIndex));
     }
 
     int get_metadata_variable_type(int id, int variableIndex) {
@@ -163,7 +164,7 @@ public:
 protected:
 // Implementation of _bind_methods
 static void _bind_methods() {
-	// Node creation and management
+    // Node creation and management
     ClassDB::bind_method(D_METHOD("from_encoded_node_tree", "encodedString"), &FastNoise::from_encoded_node_tree);
     ClassDB::bind_method(D_METHOD("delete_node_ref"), &FastNoise::delete_node_ref);
 
@@ -188,8 +189,7 @@ static void _bind_methods() {
         &FastNoise::gen_position_array_4d);
 
     // Tileable generation
-    ClassDB::bind_method(D_METHOD("gen_tileable_2d", "xSize", "ySize", "frequency", "seed"),
-        &FastNoise::gen_tileable_2d);
+    ClassDB::bind_method(D_METHOD("gen_tileable_2d", "xSize", "ySize", "frequency", "seed"), &FastNoise::gen_tileable_2d);
 
     // Single value generation
     ClassDB::bind_method(D_METHOD("gen_single_2d", "x", "y", "seed"), &FastNoise::gen_single_2d);
@@ -223,8 +223,8 @@ static void _bind_methods() {
     ClassDB::bind_method(D_METHOD("set_hybrid_float", "hybridIndex", "value"), &FastNoise::set_hybrid_float);
 }
 private:
-	void *node_;
-	LocalVector<float> noiseOut_;
+    void *node_;
+    LocalVector<float> noiseOut_;
 };
 }
 #endif

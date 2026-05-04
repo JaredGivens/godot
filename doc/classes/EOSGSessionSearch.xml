@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGSessionSearch" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="copy_search_result_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="find">
+			<return type="void" />
+			<param index="0" name="local_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_search_result_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_parameter">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="comparison_op" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_max_results">
+			<return type="int" />
+			<param index="0" name="max_results" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_parameter">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="value" type="Variant" />
+			<param index="2" name="comparison_op" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_session_id">
+			<return type="int" />
+			<param index="0" name="session_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_target_user_id">
+			<return type="int" />
+			<param index="0" name="target_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

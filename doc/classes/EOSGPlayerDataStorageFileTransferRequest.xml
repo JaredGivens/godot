@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGPlayerDataStorageFileTransferRequest" inherits="EOSGFileTransferRequest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="cancel_request">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_file_request_state">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_filename">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="file_transfer_progress_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

@@ -1559,6 +1559,8 @@
 		<member name="DisplayServer" type="DisplayServer" setter="" getter="">
 			The [DisplayServer] singleton.
 		</member>
+		<member name="EOSGPacketPeerMediator" type="EOSGPacketPeerMediator" setter="" getter="">
+		</member>
 		<member name="EditorInterface" type="EditorInterface" setter="" getter="">
 			The [EditorInterface] singleton.
 			[b]Note:[/b] Only available in editor builds.
@@ -1577,6 +1579,10 @@
 		</member>
 		<member name="Geometry3D" type="Geometry3D" setter="" getter="">
 			The [Geometry3D] singleton.
+		</member>
+		<member name="Global" type="Global" setter="" getter="">
+		</member>
+		<member name="IEOS" type="IEOS" setter="" getter="">
 		</member>
 		<member name="IP" type="IP" setter="" getter="">
 			The [IP] singleton.

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGPresenceModification" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="delete_data">
+			<return type="int" />
+			<param index="0" name="keys" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_data">
+			<return type="int" />
+			<param index="0" name="new_data" type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="set_join_info">
+			<return type="int" />
+			<param index="0" name="new_join_info" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_raw_rich_text">
+			<return type="int" />
+			<param index="0" name="new_raw_rich_text" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_status">
+			<return type="int" />
+			<param index="0" name="new_status" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

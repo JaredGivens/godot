@@ -8,20 +8,19 @@
 	</tutorials>
 	<methods>
 		<method name="get_quad_chunk" qualifiers="const">
-			<return type="QuadChunk" />
+			<return type="QuadChunk16" />
 			<param index="0" name="chunki" type="int" />
 			<description>
 			</description>
 		</method>
-		<method name="get_ssbo" qualifiers="const">
+		<method name="get_texture" qualifiers="const">
 			<return type="RID" />
 			<description>
 			</description>
 		</method>
-		<method name="update_multimesh" qualifiers="const">
+		<method name="update_chunk">
 			<return type="void" />
-			<param index="0" name="multimesh" type="RID" />
-			<param index="1" name="chunki" type="int" />
+			<param index="0" name="chunki" type="int" />
 			<description>
 			</description>
 		</method>

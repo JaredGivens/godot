@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGTransaction" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="copy_entitlement_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="entitlement_index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_entitlement_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_id">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

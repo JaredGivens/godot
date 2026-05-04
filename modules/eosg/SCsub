@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+import shutil, os
+Import('env')
+env_modules = env.Clone()
+
+eos_sdk_folder = "#modules/eosg/thirdparty/eos-sdk/SDK/"
+sources = Glob("src/*.cpp") + ["register_types.cpp"]
+env_modules.add_source_files(env_modules.modules_sources, sources)
+
+env_modules.Append(CPPPATH=[
+    "src/", 
+    eos_sdk_folder + "Include/"
+])
+
+platform = env["platform"]
+
+lib_path = env.Dir(eos_sdk_folder + "Bin/").abspath
+env.Prepend(LIBPATH=[lib_path])
+
+if platform == "windows":
+    env.Append(LIBPATH=[eos_sdk_folder + "Lib/"])
+    # The original script used Win64 Shipping
+    env.Append(LIBS=["EOSSDK-Win64-Shipping"])
+    # Keep this from the original to avoid build-cache warnings
+    env.Append(LINKFLAGS=["/ignore:4099"])
+
+elif platform == "linuxbsd":
+    # Linux needs the rpath flags to find the .so at runtime, and the shipping version of the SDK
+    env.Append(LINKFLAGS=["-Wl,-rpath,'$$ORIGIN'", "-Wl,--enable-new-dtags"])
+    env.Append(LIBPATH=[eos_sdk_folder + "Bin/"])
+    if env["arch"] == "arm64":
+        env.Append(LIBS=["EOSSDK-LinuxArm64-Shipping"])
+    else:
+        env.Append(LIBS=["EOSSDK-Linux-Shipping"])
+
+elif platform == "macos":
+    # macOS also needs the rpath flags to find the .dylib at runtime, and the shipping version of the SDK
+    env.Append(LINKFLAGS=["-Wl,-rpath,'$$ORIGIN'", "-Wl,--enable-new-dtags"])
+    env.Append(LIBPATH=[eos_sdk_folder + "Bin/"])
+    env.Append(LIBS=["EOSSDK-Mac-Shipping"])
+
+elif platform == "android":
+    # Android is tricky because it uses a static-stdc++ setup in EOS
+    # We point to the libs extracted from the AAR
+    eos_android_arch = "arm64-v8a"
+    if env["arch"] == "x86_64":
+        eos_android_arch = "x86_64"
+
+    env.Append(LIBPATH=[eos_sdk_folder + "Bin/Android/static-stdc++/libs/" + eos_android_arch + "/"])
+    env.Append(LIBS=["EOSSDK"])
+
+elif platform == "ios":
+    # iOS uses Frameworks rather than simple libs
+    env.Append(LINKFLAGS=[
+        "-F", eos_sdk_folder + "Bin/IOS/",
+        "-framework", "AuthenticationServices",
+        "-framework", "EOSSDK",
+    ])
+
+
+# Copy all files from EOS SDK Bin into project's bin/ (minimal, tolerant)
+sdk_bin = os.path.join(env.Dir('#').abspath, eos_sdk_folder.lstrip('#/'), "Bin")
+dest = os.path.join(env.Dir('#').abspath, "bin")
+os.makedirs(dest, exist_ok=True)
+if os.path.isdir(sdk_bin):
+    for name in os.listdir(sdk_bin):
+        src = os.path.join(sdk_bin, name)
+        if os.path.isfile(src):
+            try:
+                shutil.copy2(src, dest)
+            except Exception:
+                pass

@@ -54,9 +54,8 @@ void uninitialize_text_server_adv_module(ModuleInitializationLevel p_level) {
 
 #ifdef GDEXTENSION
 
-#include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/core/defs.hpp>
-#include <godot_cpp/core/memory.hpp>
+#include <core/object/class_db.h>
+#include <core/os/memory.h>
 
 using namespace godot;
 

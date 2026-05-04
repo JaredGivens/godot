@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGLobbyModification" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_attribute">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="value" type="Variant" />
+			<param index="2" name="visibility" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="add_member_attribute">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="value" type="Variant" />
+			<param index="2" name="visibility" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_attribute">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_member_attribute">
+			<return type="int" />
+			<param index="0" name="key" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_allowed_platform_ids">
+			<return type="int" />
+			<param index="0" name="allowed_platform_ids" type="int[]" />
+			<description>
+			</description>
+		</method>
+		<method name="set_bucket_id">
+			<return type="int" />
+			<param index="0" name="bucket_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_invites_allowed">
+			<return type="int" />
+			<param index="0" name="invites_allowed" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_max_members">
+			<return type="int" />
+			<param index="0" name="max_members" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_permission_level">
+			<return type="int" />
+			<param index="0" name="permission_level" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

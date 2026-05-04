@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="Global" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_block_props" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="bid" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_block_props_buffer" qualifiers="const">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
+		<method name="set_block_props">
+			<return type="void" />
+			<param index="0" name="block_properties" type="PackedInt32Array" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="PROPERTY_SHARP" value="256" enum="Property">
+		</constant>
+		<constant name="PROPERTY_INTERACTABLE" value="512" enum="Property">
+		</constant>
+		<constant name="PROPERTY_LIQUID" value="1024" enum="Property">
+		</constant>
+		<constant name="PROPERTY_GAS" value="2048" enum="Property">
+		</constant>
+	</constants>
+</class>

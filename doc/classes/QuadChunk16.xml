@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="QuadChunk16" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="from_compressed">
+			<return type="bool" />
+			<param index="0" name="data" type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="get_addr" qualifiers="const">
+			<return type="PackedInt64Array" />
+			<description>
+			</description>
+		</method>
+		<method name="get_compressed" qualifiers="const">
+			<return type="PackedByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="get_count" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_quad" qualifiers="const">
+			<return type="PackedInt32Array" />
+			<param index="0" name="blocki" type="int" />
+			<param index="1" name="trii" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_block">
+			<return type="bool" />
+			<param index="0" name="blocki" type="int" />
+			<param index="1" name="position" type="Vector3i" />
+			<param index="2" name="blockId" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="SIZE_1D" value="16">
+		</constant>
+		<constant name="SIZE_2D" value="256">
+		</constant>
+		<constant name="SIZE_3D" value="4096">
+		</constant>
+		<constant name="QUAD_DIR_EMPTY" value="0" enum="QuadDir">
+		</constant>
+		<constant name="QUAD_DIR_POS" value="1" enum="QuadDir">
+		</constant>
+		<constant name="QUAD_DIR_NEG" value="2" enum="QuadDir">
+		</constant>
+	</constants>
+</class>

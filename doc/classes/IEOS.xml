@@ -1,0 +1,2903 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="IEOS" inherits="Object" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="achievements_interface_copy_achievement_definition_v2_by_achievement_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_copy_achievement_definition_v2_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_copy_player_achievement_by_achievement_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_copy_player_achievement_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_get_achievement_definition_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_get_player_achievement_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_query_definitions">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_query_player_achievements">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="achievements_interface_unlock_achievements">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_add_external_integrity_catalog">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_begin_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_end_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_get_protect_message_output_length">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_protect_message">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_receive_message_from_peer">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_receive_message_from_server">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_register_peer">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_unprotect_message">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_client_interface_unregister_peer">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_begin_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_end_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_get_protect_message_output_length">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_event">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_game_round_end">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_game_round_start">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_despawn">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_revive">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_spawn">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_take_damage">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_tick">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_use_ability">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_log_player_use_weapon">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_protect_message">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_receive_message_from_client">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_register_client">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_register_event">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_set_client_details">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_set_client_network_state">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_set_game_session_id">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_unprotect_message">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="anticheat_server_interface_unregister_client">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_copy_id_token">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_copy_user_auth_token">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<param index="1" name="_unnamed_arg1" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_delete_persistent_auth">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_logged_in_account_by_index">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_logged_in_accounts_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_login_status">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_merged_account_by_index">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<param index="1" name="_unnamed_arg1" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_merged_accounts_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_get_selected_account_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_link_account">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_login">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_logout">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_query_id_token">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_verify_id_token">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="auth_interface_verify_user_auth">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_copy_id_token">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_copy_product_user_external_account_by_account_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_copy_product_user_external_account_by_account_type">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_copy_product_user_external_account_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_copy_product_user_info">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_create_device_id">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_create_user">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_delete_device_id">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_external_account_mapping">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_logged_in_user_by_index">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_logged_in_users_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_login_status">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_product_user_external_account_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_get_product_user_id_mapping">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_link_account">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_login">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_logout">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_query_external_account_mappings">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_query_product_user_id_mappings">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_transfer_device_id_account">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_unlink_account">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="connect_interface_verify_id_token">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_accept_request_to_join">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_finalize_invite">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_reject_request_to_join">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_send_custom_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_send_request_to_join">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="custom_invites_interface_set_custom_invite">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_checkout">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_entitlement_by_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_entitlement_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_entitlement_by_name_and_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_item_by_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_item_image_info_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_item_release_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_last_redeemed_entitlement_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_offer_by_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_offer_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_offer_image_info_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_offer_item_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_transaction_by_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_copy_transaction_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_entitlements_by_name_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_entitlements_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_item_image_info_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_item_release_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_last_redeemed_entitlements_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_offer_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_offer_image_info_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_offer_item_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_get_transaction_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_entitlement_token">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_entitlements">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_offers">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_ownership">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_ownership_by_sandbox_ids">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_query_ownership_token">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ecom_interface_redeem_entitlements">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_accept_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_get_blocked_user_at_index">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_get_blocked_users_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_get_friend_at_index">
+			<return type="String" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_get_friends_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_get_status">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_query_friends">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_reject_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="friends_interface_send_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="is_operation_complete">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_copy_permission_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_create_user">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_get_permission_by_key">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_get_permissions_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_query_age_gate">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_query_permissions">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_request_permissions">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="kws_interface_update_parent_email">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_definition_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_definition_by_leaderboard_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_record_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_record_by_user_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_user_score_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_copy_leaderboard_user_score_by_user_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_get_leaderboard_definition_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_get_leaderboard_record_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_get_leaderboard_user_score_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_query_leaderboard_definitions">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_query_leaderboard_ranks">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="leaderboards_interface_query_leaderboard_user_scores">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_copy_lobby_details">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_copy_lobby_details_by_invite_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_copy_lobby_details_by_ui_event_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_create_lobby">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_create_lobby_search">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_destroy_lobby">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_get_connect_string">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_get_invite_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_get_invite_id_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_get_rtc_room_name">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_hard_mute_member">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_is_rtc_room_connected">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_join_lobby">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_join_lobby_by_id">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_kick_member">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_leave_lobby">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_parse_connect_string">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_promote_member">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_query_invites">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_reject_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_send_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_update_lobby">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="lobby_interface_update_lobby_modification">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="logging_interface_set_log_level">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<param index="1" name="_unnamed_arg1" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="metrics_interface_begin_player_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="metrics_interface_end_player_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="mods_interface_copy_mod_info">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="mods_interface_enumerate_mods">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="mods_interface_install_mod">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="mods_interface_uninstall_mod">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="mods_interface_update_mod">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_get_nat_type">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_get_packet_queue_info">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_get_port_range">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_get_relay_control">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_query_nat_type">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_set_packet_queue_size">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_set_port_range">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="p2p_interface_set_relay_control">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_check_for_launcher_and_restart">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_create">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_active_country_code">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_active_locale_code">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_application_status">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_desktop_crossplay_status_info">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_network_status">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_override_country_code">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_get_override_locale_code">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_initialize">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_release">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_set_application_status">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_set_network_status">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_set_override_country_code">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_set_override_locale_code">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="platform_interface_shutdown">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_copy_file_metadata_at_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_copy_file_metadata_by_filename">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_delete_cache">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_delete_file">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_duplicate_file">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_get_file_metadata_count">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_query_file">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_query_file_list">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_read_file">
+			<return type="Variant" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="playerdatastorage_interface_write_file">
+			<return type="Variant" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_copy_presence">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_create_presence_modification">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_get_join_info">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_has_presence">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_query_presence">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="presence_interface_set_presence">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="progression_snapshot_interface_add_progression">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="progression_snapshot_interface_begin_snapshot">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="progression_snapshot_interface_delete_snapshot">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="progression_snapshot_interface_end_snapshot">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="progression_snapshot_interface_submit_snapshot">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="reports_interface_send_player_behavior_report">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_add_notify_audio_before_render">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_add_notify_audio_before_send">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_add_notify_audio_input_state">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_add_notify_audio_output_state">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_add_notify_participant_updated">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_copy_input_device_information_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_copy_output_device_information_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_get_input_devices_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_get_output_devices_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_query_input_devices_information">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_query_output_devices_information">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_register_platform_user">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_remove_notify_audio_before_render">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_remove_notify_audio_before_send">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_remove_notify_audio_input_state">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_remove_notify_audio_output_state">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_remove_notify_participant_updated">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_send_audio">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_set_input_device_settings">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_set_output_device_settings">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_unregister_platform_user">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_update_participant_volume">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_update_receiving">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_update_receiving_volume">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_update_sending">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_audio_interface_update_sending_volume">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_add_notify_data_received">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_add_notify_participant_updated">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_remove_notify_data_received">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_remove_notify_participant_updated">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_send_data">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_update_receiving">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_data_interface_update_sending">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_add_notify_disconnected">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_add_notify_participant_status_changed">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_add_notify_room_statistics_updated">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_block_participant">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_join_room">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_leave_room">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_remove_notify_disconnected">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_remove_notify_participant_status_changed">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_remove_notify_room_statistics_updated">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_set_room_setting">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="rtc_interface_set_setting">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sanctions_interface_copy_player_sanction_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sanctions_interface_create_player_sanction_appeal">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sanctions_interface_get_player_sanction_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sanctions_interface_query_active_player_sanctions">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_copy_active_session_details">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_copy_session_details_by_invite_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_copy_session_details_by_ui_event_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_copy_session_details_for_presence">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_create_session_modification">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_create_session_search">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_destroy_session">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_dump_session_state">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_end_session">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_get_invite_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_get_invite_id_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_is_user_in_session">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_join_session">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_query_invites">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_register_players">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_reject_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_send_invite">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_start_session">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_unregister_players">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_update_session">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="sessions_interface_update_session_modification">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="stats_interface_copy_stat_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="stats_interface_copy_stat_by_name">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="stats_interface_get_stats_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="stats_interface_ingest_stat">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="stats_interface_query_stats">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="tick" qualifiers="static">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_copy_file_metadata_at_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_copy_file_metadata_by_filename">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_delete_cache">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_get_file_metadata_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_query_file">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_query_file_list">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="titlestorage_interface_read_file">
+			<return type="Variant" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_acknowledge_event_id">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_get_friends_exclusive_input">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_get_friends_visible">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_get_notification_location_preference">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_get_toggle_friends_button">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_get_toggle_friends_key">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_hide_friends">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_is_social_overlay_paused">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_is_valid_button_combination">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_is_valid_key_combination">
+			<return type="bool" />
+			<param index="0" name="_unnamed_arg0" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_pause_social_overlay">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_pre_present">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_report_input_state">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_set_display_preference">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_set_toggle_friends_button">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_set_toggle_friends_key">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_show_block_player">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_show_friends">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_show_native_profile">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="ui_interface_show_report_player">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_best_display_name">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_best_display_name_with_platform">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_external_user_info_by_account_id">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_external_user_info_by_account_type">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_external_user_info_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_copy_user_info">
+			<return type="Dictionary" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_get_external_user_info_count">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_get_local_platform_type">
+			<return type="int" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_query_user_info">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_query_user_info_by_display_name">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="user_info_interface_query_user_info_by_external_account">
+			<return type="void" />
+			<param index="0" name="_unnamed_arg0" type="RefCounted" />
+			<description>
+			</description>
+		</method>
+		<method name="version_interface_get_constants">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="version_interface_get_version">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="achievements_interface_achievements_unlocked_v2_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="achievements_interface_query_definitions_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="achievements_interface_query_player_achievements_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="achievements_interface_unlock_achievements_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheat_client_interface_client_integrity_violated_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheat_client_interface_message_to_peer_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheat_client_interface_message_to_server_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheatserver_interface_client_action_required_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheatserver_interface_client_auth_status_changed_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="anticheatserver_interface_message_to_client_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_delete_persistent_auth_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_link_account_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_login_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_login_status_changed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_logout_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_query_id_token_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_verify_id_token_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="auth_interface_verify_user_auth_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_auth_expiration">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_create_device_id_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_create_user_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_delete_device_id_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_link_account_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_login_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_login_status_changed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_logout_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_query_external_account_mappings_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_query_product_user_id_mappings_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_transfer_device_id_account_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_unlink_account_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="connect_interface_verify_id_token_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_accept_request_to_join_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_custom_invite_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_custom_invite_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_custom_invite_rejected_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_reject_request_to_join_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_request_to_join_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_request_to_join_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_request_to_join_rejected_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_request_to_join_response_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_send_custom_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="custom_invites_interface_send_request_to_join_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_checkout_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_entitlement_token_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_entitlements_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_offers_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_ownership_by_sandbox_ids_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_ownership_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_query_ownership_token_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ecom_interface_redeem_entitlements_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_accept_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_blocked_users_update_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_friends_update_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_query_friends_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_reject_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="friends_interface_send_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_create_user_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_permissions_update_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_query_age_gate_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_query_permissions_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_request_permissions_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="kws_interface_update_parent_email_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="leaderboards_interface_query_leaderboard_definitions_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="leaderboards_interface_query_leaderboard_ranks_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="leaderboards_interface_query_leaderboard_user_scores_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_create_lobby_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_destroy_lobby_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_hard_mute_member_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_join_lobby_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_join_lobby_by_id_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_join_lobby_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_join_rtc_room_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_kick_member_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_leave_lobby_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_leave_lobby_requested_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_leave_rtc_room_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_invite_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_invite_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_invite_rejected_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_member_status_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_member_update_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_lobby_update_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_promote_member_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_query_invites_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_reject_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_rtc_room_connection_changed_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_send_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_send_lobby_native_invite_requested_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_interface_update_lobby_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="lobby_search_find_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="logging_interface_callback">
+			<param index="0" name="log_message" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="mods_interface_enumerate_mods_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="mods_interface_install_mod_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="mods_interface_uninstall_mod_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="mods_interface_update_mod_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="p2p_interface_incoming_packet_queue_full">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="p2p_interface_query_nat_type_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_delete_cache_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_delete_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_duplicate_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_file_transfer_progress_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_query_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_query_file_list_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_read_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_read_file_data_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_write_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="playerdatastorage_interface_write_file_data_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="presence_interface_join_game_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="presence_interface_presence_changed_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="presence_interface_query_presence_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="presence_interface_set_presence_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="progression_snapshot_interface_delete_snapshot_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="progression_snapshot_interface_submit_snapshot_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="reports_interface_send_player_behavior_report_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_audio_before_render">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_audio_before_send">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_audio_devices_changed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_audio_input_state">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_audio_output_state">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_query_input_devices_information_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_query_output_devices_information_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_register_platform_user_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_set_input_device_settings_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_set_output_device_settings_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_unregister_platform_user_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_update_participant_volume_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_update_receiving_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_update_receiving_volume_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_update_sending_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_interface_update_sending_volume_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_audio_participant_updated">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_data_data_received">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_data_interface_update_receiving_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_data_interface_update_sending_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_data_participant_updated">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_block_participant_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_disconnected">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_join_room_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_leave_room_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_participant_status_changed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="rtc_interface_room_statistics_updated">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sanctions_interface_create_player_sanction_appeal_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sanctions_interface_query_active_player_sanctions_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="session_search_find_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_destroy_session_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_end_session_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_join_session_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_join_session_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_leave_session_requested_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_query_invites_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_register_players_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_reject_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_send_invite_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_send_session_native_invite_requested_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_session_invite_accepted_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_session_invite_received_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_session_invite_rejected_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_start_session_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_unregister_players_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="sessions_interface_update_session_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="stats_interface_ingest_stat_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="stats_interface_query_stats_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_delete_cache_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_file_transfer_progress_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_query_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_query_file_list_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_read_file_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="titlestorage_interface_read_file_data_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_display_settings_updated_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_hide_friends_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_memory_monitor_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_show_block_player_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_show_friends_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_show_native_profile_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="ui_interface_show_report_player_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="user_info_interface_query_user_info_by_display_name_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="user_info_interface_query_user_info_by_external_account_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="user_info_interface_query_user_info_callback">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGLobbyDetails" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="copy_attribute_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="copy_attribute_by_key">
+			<return type="Dictionary" />
+			<param index="0" name="key" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="copy_info">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="copy_member_attribute_by_index">
+			<return type="Dictionary" />
+			<param index="0" name="target_user_id" type="String" />
+			<param index="1" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="copy_member_attribute_by_key">
+			<return type="Dictionary" />
+			<param index="0" name="target_user_id" type="String" />
+			<param index="1" name="key" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="copy_member_info">
+			<return type="Dictionary" />
+			<param index="0" name="target_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_attribute_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_lobby_owner">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_member_attribute_count">
+			<return type="int" />
+			<param index="0" name="target_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_member_by_index">
+			<return type="String" />
+			<param index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_member_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

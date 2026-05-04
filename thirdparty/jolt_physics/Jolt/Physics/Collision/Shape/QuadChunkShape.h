@@ -1,7 +1,7 @@
 #ifndef SSK_JOLT_CHUNK_SHAPE_H
 #define SSK_JOLT_CHUNK_SHAPE_H
 
-#include <modules/shardscape/QuadChunk.h>
+#include <modules/shardscape/QuadChunk16.h>
 
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/Collision/Shape/Shape.h>
@@ -13,11 +13,11 @@ class CollideShapeSettings;
 
 class JPH_EXPORT QuadChunkShapeSettings final : public ShapeSettings {
 public:
-	QuadChunkShapeSettings(const SSK::QuadChunk *pQuadChunk) :
+	QuadChunkShapeSettings(const SSK::QuadChunk16 *pQuadChunk) :
 			mQuadChunk(pQuadChunk) {}
 
 	virtual ShapeResult Create() const override;
-	const SSK::QuadChunk *mQuadChunk;
+	const SSK::QuadChunk16 *mQuadChunk;
 };
 
 class JPH_EXPORT QuadChunkShape final : public Shape {
@@ -28,15 +28,15 @@ public:
 	QuadChunkShape() :
 			Shape(EShapeType::User3, EShapeSubType::User3) {}
 	QuadChunkShape(const QuadChunkShapeSettings &inSettings, ShapeResult &outResult);
-	const SSK::QuadChunk *mQuadChunk;
+	const SSK::QuadChunk16 *mQuadChunk;
 
 	virtual bool MustBeStatic() const override { return true; }
 	// See Shape::GetLocalBounds
-	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk::SIZE_1D + 3)); }
+	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk16::SIZE_1D + 3)); }
 	// See Shape::GetSubShapeIDBitsRecursive
 	virtual uint GetSubShapeIDBitsRecursive() const override { return cSubShapeIDBits; }
 	// See Shape::GetInnerRadius
-	virtual float GetInnerRadius() const override { return SSK::QuadChunk::SIZE_1D / 2.0F; }
+	virtual float GetInnerRadius() const override { return SSK::QuadChunk16::SIZE_1D / 2.0F; }
 	// See Shape::GetMassProperties
 	virtual MassProperties GetMassProperties() const override;
 

@@ -1,10 +1,10 @@
 #pragma once
-#include <modules/shardscape/QuadChunk.h>
+#include <modules/shardscape/QuadChunk16.h>
 #include <modules/jolt_physics/shapes/jolt_shape_3d.h>
 
 class JoltQuadChunkShape3D final : public JoltShape3D {
 	const AABB aabb = AABB(Vector3(0, 0, 0), Vector3(32, 32, 32));
-	SSK::QuadChunk *quad_chunk = nullptr;
+	SSK::QuadChunk16 *quad_chunk = nullptr;
 virtual JPH::ShapeRefC _build() const override;
 
 public:

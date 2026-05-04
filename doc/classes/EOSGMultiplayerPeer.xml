@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGMultiplayerPeer" inherits="MultiplayerPeer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="accept_all_connection_requests">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="accept_connection_request">
+			<return type="void" />
+			<param index="0" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="add_mesh_peer">
+			<return type="int" enum="Error" />
+			<param index="0" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="create_client">
+			<return type="int" enum="Error" />
+			<param index="0" name="socket_id" type="String" />
+			<param index="1" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="create_mesh">
+			<return type="int" enum="Error" />
+			<param index="0" name="socket_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="create_server">
+			<return type="int" enum="Error" />
+			<param index="0" name="socket_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="deny_all_connection_requests">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="deny_connection_request">
+			<return type="void" />
+			<param index="0" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_active_mode">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_all_connection_requests">
+			<return type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="get_all_peers">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_local_user_id" qualifiers="static">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_peer_id">
+			<return type="int" />
+			<param index="0" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="get_peer_user_id">
+			<return type="String" />
+			<param index="0" name="peer_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_socket" qualifiers="const">
+			<return type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="has_peer">
+			<return type="bool" />
+			<param index="0" name="peer_id" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="has_user_id">
+			<return type="bool" />
+			<param index="0" name="remote_user_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="is_allowing_delayed_delivery">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="is_auto_accepting_connection_requests">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="is_polling">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_allow_delayed_delivery">
+			<return type="void" />
+			<param index="0" name="allow" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_auto_accept_connection_requests">
+			<return type="void" />
+			<param index="0" name="enable" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="set_is_polling">
+			<return type="void" />
+			<param index="0" name="polling" type="bool" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<signals>
+		<signal name="incoming_connection_request">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="peer_connection_closed">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="peer_connection_established">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+		<signal name="peer_connection_interrupted">
+			<param index="0" name="callback_data" type="Dictionary" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

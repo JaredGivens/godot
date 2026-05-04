@@ -1,5 +1,5 @@
 #include "QuadChunkShape.h"
-#include "modules/shardscape/QuadChunk.h"
+#include "modules/shardscape/QuadChunk16.h"
 #include "modules/shardscape/vector3u4.h"
 
 #include <Jolt/AABBTree/AABBTreeBuilder.h>
@@ -42,7 +42,7 @@
 JPH_NAMESPACE_BEGIN
 
 static constexpr uint32_t cStackSize = 256; // Stack size for blocks
-using QC = SSK::QuadChunk;
+using QC = SSK::QuadChunk16;
 
 /// This function will sort values from high to low and only keep the ones that are less than inMaxValue
 /// @param inValues Values to be sorted
@@ -217,16 +217,14 @@ void VisitStarT(Visitor &ioVisitor, int32_t xyz) {
 		auto v3u4 = Vector3u4(xyz);
 		v3u4.try_add(~ax & 1, -((~i >> 0) & 1));
 		v3u4.try_add(~ax & 2, -((~i >> 1) & 1));
-		if (v3u4.is_invalid()) {
+		if (v3u4.is_invalid())
 			continue;
-		}
-		auto hex = ioVisitor.mShape->mQuadChunk->hexes() + v3u4.packed;
-		auto state = (hex->states >> (QC::QUAD_STATE_SHIFT * ax)) & QC::QUAD_STATE_MASK;
-		if (state == QC::QUAD_STATE_DISABLED) {
-			continue;
-		}
 		ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
+		if (ioVisitor.ShouldAbort())
+			return;
 		ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
+		if (ioVisitor.ShouldAbort())
+			return;
 	}
 }
 

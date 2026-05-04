@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EOSGActiveSession" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="copy_info">
+			<return type="Dictionary" />
+			<description>
+			</description>
+		</method>
+		<method name="get_registered_player_by_index">
+			<return type="String" />
+			<param index="0" name="player_index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_registered_player_count">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

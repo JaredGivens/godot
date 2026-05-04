@@ -1,6 +1,5 @@
 #include "core/variant/variant.h"
 #include "jolt_quad_chunk_shape_3d.h"
-#include "modules/shardscape/QuadChunk.h"
 
 #include "../jolt_project_settings.h"
 #include "../misc/jolt_type_conversions.h"
@@ -26,7 +25,7 @@ void JoltQuadChunkShape3D::set_data(const Variant &p_data) {
 
 	const Dictionary data = p_data;
 
-	quad_chunk = reinterpret_cast<SSK::QuadChunk *>(static_cast<intptr_t>(static_cast<PackedInt64Array>(p_data)[0]));
+	quad_chunk = reinterpret_cast<SSK::QuadChunk16 *>(static_cast<intptr_t>(static_cast<PackedInt64Array>(p_data)[0]));
 
 	destroy();
 }
