@@ -17,13 +17,7 @@ struct Vector3u4 {
             uint32_t y        : 4;  // bits 4–7
             uint32_t z        : 4;  // bits 8–11
             uint32_t invalid  : 1;  // bit 12
-            uint32_t x_bit5   : 1;  // bit 13
-            uint32_t y_bit5   : 1;  // bit 14
-            uint32_t z_bit5   : 1;  // bit 15
-            uint32_t x_sign   : 1;  // bit 16
-            uint32_t y_sign   : 1;  // bit 17
-            uint32_t z_sign   : 1;  // bit 18
-            uint32_t _unused  : 13; // bits 19-31
+            uint32_t _unused  : 19; // bits 19-31
         };
     };
 
@@ -40,8 +34,4 @@ struct Vector3u4 {
     int operator[](int axis) const;
     operator Vector3() const;
     operator Vector3i() const;
-
-private:
-    void store_with_overflow(int axis, int value);
-    int reconstruct_value(int axis) const;
 };

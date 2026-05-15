@@ -12,7 +12,7 @@ constexpr int32_t ATLAS_PIXELS_1D = ChunkAtlas::SIZE_1D * CHUNK_BLOCKS_1D;
 ChunkAtlas::ChunkAtlas() {
 
 	RenderingDevice::TextureFormat format;
-    format.format = RenderingDevice::DataFormat::DATA_FORMAT_A8B8G8R8_UINT_PACK32;
+    format.format = RenderingDevice::DataFormat::DATA_FORMAT_R32_SINT;
     format.width = ATLAS_PIXELS_1D;
     format.height = ATLAS_PIXELS_1D;
     format.mipmaps = 1;

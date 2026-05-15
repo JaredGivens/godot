@@ -85,7 +85,7 @@ int QuadChunk16::get_tri(int32_t blocki, int32_t trii, float *outFloats) const {
 
     if (dir != QUAD_DIR_NEG && dir != QUAD_DIR_POS) return 1;
 
-    if ((qt == 0 && dir == QUAD_DIR_NEG) || (qt == 1 && dir == QUAD_DIR_POS)) {
+    if ((qt == 1) ^ (quadi == 0 ^ dir == QUAD_DIR_NEG)) {
         SWAP(b1, b3);
         SWAP(v3u41, v3u43);
     }
@@ -116,7 +116,7 @@ PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
     Vector3u4 v3u43 = v3u41;
     v3u43.try_add(~quadi & (1 << (qt ^ 1)), 1);
 
-    Vector3u4 v3u47 = v3u42;
+    Vector3u4 v3u47 = v3u43;
     v3u47.try_add(quadi, 1);
 
     Block const *b0 = blocks() + v3u40.packed;
@@ -129,17 +129,12 @@ PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
     int32_t bid7 = b7->blockId;
 	int32_t prop3 = GB->get_block_props(bid3);
 	int32_t prop7 = GB->get_block_props(bid7);
-    int32_t dir = ((prop3 & Global::PROPERTY_GAS) == 0) << 1 | ((prop7 & Global::PROPERTY_GAS) == 0) << 0;
+    int32_t dir = ((prop3 & Global::PROPERTY_GAS) == 0) | ((prop7 & Global::PROPERTY_GAS) == 0) << 1;
 
     //int32_t use_trs = -(dir == 3 && bid3 != bid7);
     //bool trs3 = (prop3 & Global::PROPERTY_TRANSPARENT) != 0;
     //bool trs7 = (prop7 & Global::PROPERTY_TRANSPARENT) != 0;
     //dir = (use_trs & ((trs3 && !trs7) << 0 | (trs7 && !trs3) << 1)) | (~use_trs & dir);
-
-    if ((qt == 0 && dir == QUAD_DIR_POS) || (qt == 1 && dir == QUAD_DIR_NEG)) {
-        SWAP(b1, b3);
-        SWAP(v3u41, v3u43);
-    }
 
     Vector3i vt0 = Vector3i(v3u40) * 24 + Vector3i(b0->x, b0->y, b0->z);
     Vector3i vt1 = Vector3i(v3u41) * 24 + Vector3i(b1->x, b1->y, b1->z);
@@ -149,11 +144,11 @@ PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
     PackedInt32Array res;
     res.resize(14);
     int32_t *w = res.ptrw();
-    w[0] = vt0.x; w[1] = vt0.y; w[2] = vt0.z;
-    w[3] = vt1.x; w[4] = vt1.y; w[5] = vt1.z;
-    w[6] = vt2.x; w[7] = vt2.y; w[8] = vt2.z;
-    w[9] = vt3.x; w[10] = vt3.y; w[11] = vt3.z;
-    w[12] = dir;  w[13] = bid7;
+    w[0]  = vt0.x; w[1]  = vt0.y; w[2]  = vt0.z;
+    w[3]  = vt1.x; w[4]  = vt1.y; w[5]  = vt1.z;
+    w[6]  = vt2.x; w[7]  = vt2.y; w[8]  = vt2.z;
+    w[9]  = vt3.x; w[10] = vt3.y; w[11] = vt3.z;
+    w[12] = dir;   w[13] = dir == QUAD_DIR_POS ? bid3 : bid7;
 
     return res;
 }

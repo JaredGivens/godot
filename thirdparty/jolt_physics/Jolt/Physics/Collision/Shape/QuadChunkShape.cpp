@@ -211,22 +211,20 @@ void QuadChunkShape::GetSupportingFace(const SubShapeID &inSubShapeID, Vec3Arg i
 }
 
 template <typename Visitor>
-void VisitStarT(Visitor &ioVisitor, int32_t xyz) {
-	for (int32_t i = 0; i < 12; ++i) {
-		auto ax = i >> 2;
-		auto v3u4 = Vector3u4(xyz);
-		v3u4.try_add(~ax & 1, -((~i >> 0) & 1));
-		v3u4.try_add(~ax & 2, -((~i >> 1) & 1));
-		if (v3u4.is_invalid())
-			continue;
-		ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
-		if (ioVisitor.ShouldAbort())
-			return;
-		ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
-		if (ioVisitor.ShouldAbort())
-			return;
-	}
-}
+ void VisitStarT(Visitor &ioVisitor, int32_t xyz) {
+     for (int32_t i = 0; i < 12; ++i) {
+         auto ax = i >> 2;
+         int comp[3] = { (xyz >> 0) & 0xF, (xyz >> 4) & 0xF, (xyz >> 8) & 0xF };
+         comp[~ax & 1] -= (~i >> 0) & 1;
+         comp[~ax & 2] -= (~i >> 1) & 1;
+         auto v3u4 = Vector3u4(comp[0], comp[1], comp[2]);
+         if (v3u4.is_invalid()) continue;
+         ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
+         if (ioVisitor.ShouldAbort()) return;
+         ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
+         if (ioVisitor.ShouldAbort()) return;
+     }
+ }
 
 #ifdef JPH_DEBUG_RENDERER
 void QuadChunkShape::Draw(DebugRenderer *inRenderer, RMat44Arg inCenterOfMassTransform, Vec3Arg inScale, ColorArg inColor, bool inUseMaterialColors, bool inDrawWireframe) const {
