@@ -17,6 +17,7 @@ void QuadChunk16::_bind_methods() {
     ClassDB::bind_integer_constant("QuadChunk16", StringName(), "SIZE_1D", SIZE_1D);
     ClassDB::bind_integer_constant("QuadChunk16", StringName(), "SIZE_2D", SIZE_2D);
     ClassDB::bind_integer_constant("QuadChunk16", StringName(), "SIZE_3D", SIZE_3D);
+    ClassDB::bind_integer_constant("QuadChunk16", StringName(), "SUB_GRID_SCALE", SUB_GRID_SCALE);
 
     BIND_ENUM_CONSTANT(QUAD_DIR_EMPTY);
     BIND_ENUM_CONSTANT(QUAD_DIR_POS);
@@ -90,9 +91,9 @@ int QuadChunk16::get_tri(int32_t blocki, int32_t trii, float *outFloats) const {
         SWAP(v3u41, v3u43);
     }
 
-    Vector3 vt0 = Vector3(v3u40) + Vector3(b0->x, b0->y, b0->z) / 24.0f;
-    Vector3 vt1 = Vector3(v3u41) + Vector3(b1->x, b1->y, b1->z) / 24.0f;
-    Vector3 vt3 = Vector3(v3u43) + Vector3(b3->x, b3->y, b3->z) / 24.0f;
+    Vector3 vt0 = Vector3(v3u40) + Vector3(b0->x, b0->y, b0->z) / (float)SUB_GRID_SCALE;
+    Vector3 vt1 = Vector3(v3u41) + Vector3(b1->x, b1->y, b1->z) / (float)SUB_GRID_SCALE;
+    Vector3 vt3 = Vector3(v3u43) + Vector3(b3->x, b3->y, b3->z) / (float)SUB_GRID_SCALE;
 
     if ((vt3 - vt0).cross((vt1 - vt0)).is_zero_approx()) return 1;
 
@@ -136,10 +137,10 @@ PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
     //bool trs7 = (prop7 & Global::PROPERTY_TRANSPARENT) != 0;
     //dir = (use_trs & ((trs3 && !trs7) << 0 | (trs7 && !trs3) << 1)) | (~use_trs & dir);
 
-    Vector3i vt0 = Vector3i(v3u40) * 24 + Vector3i(b0->x, b0->y, b0->z);
-    Vector3i vt1 = Vector3i(v3u41) * 24 + Vector3i(b1->x, b1->y, b1->z);
-    Vector3i vt2 = Vector3i(v3u42) * 24 + Vector3i(b2->x, b2->y, b2->z);
-    Vector3i vt3 = Vector3i(v3u43) * 24 + Vector3i(b3->x, b3->y, b3->z);
+    Vector3i vt0 = Vector3i(v3u40) * SUB_GRID_SCALE + Vector3i(b0->x, b0->y, b0->z);
+    Vector3i vt1 = Vector3i(v3u41) * SUB_GRID_SCALE + Vector3i(b1->x, b1->y, b1->z);
+    Vector3i vt2 = Vector3i(v3u42) * SUB_GRID_SCALE + Vector3i(b2->x, b2->y, b2->z);
+    Vector3i vt3 = Vector3i(v3u43) * SUB_GRID_SCALE + Vector3i(b3->x, b3->y, b3->z);
 
     PackedInt32Array res;
     res.resize(14);
@@ -148,7 +149,7 @@ PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
     w[3]  = vt1.x; w[4]  = vt1.y; w[5]  = vt1.z;
     w[6]  = vt2.x; w[7]  = vt2.y; w[8]  = vt2.z;
     w[9]  = vt3.x; w[10] = vt3.y; w[11] = vt3.z;
-    w[12] = dir;   w[13] = dir == QUAD_DIR_POS ? bid3 : bid7;
+    w[12] = dir;   w[13] = dir == QUAD_DIR_POS ? v3u43.packed : v3u47.packed;
 
     return res;
 }

@@ -220,9 +220,7 @@ template <typename Visitor>
          auto v3u4 = Vector3u4(comp[0], comp[1], comp[2]);
          if (v3u4.is_invalid()) continue;
          ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
-         if (ioVisitor.ShouldAbort()) return;
          ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
-         if (ioVisitor.ShouldAbort()) return;
      }
  }
 
@@ -381,9 +379,9 @@ void CastRayT(Visitor &ioVisitor) {
 	// step through vert grid and check attached vert stars(cell)
 	while (!xyz.is_invalid()) {
 		VisitStarT(ioVisitor, xyz.packed);
-		if (ioVisitor.ShouldAbort()) {
-			break;
-		}
+		//if (ioVisitor.ShouldAbort()) {
+			//break;
+			//}
 		auto ax = tMax[0] < tMax[1] && tMax[0] < tMax[2] ? 0 : (tMax[1] < tMax[2] ? 1 : 2);
 		if (end_v3u4.packed == xyz.packed) {
 			break;
@@ -414,6 +412,9 @@ bool QuadChunkShape::CastRay(const RayCast &inRay, const SubShapeIDCreator &inSu
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 				return;
 			}
+			if (mBackFaceMode == EBackFaceMode::IgnoreBackFaces && (verts[2] - verts[0]).Cross(verts[1] - verts[0]).Dot(mRayDirection) < 0) {
+				return;
+			}
 			float fraction = RayTriangle(mRayOrigin, mRayDirection, verts[0], verts[1], verts[2]);
 			if (fraction < mHit.mFraction) {
 				mHit.mFraction = fraction;
@@ -428,6 +429,7 @@ bool QuadChunkShape::CastRay(const RayCast &inRay, const SubShapeIDCreator &inSu
 		RayInvDirection mRayInvDirection;
 		const QuadChunkShape *mShape;
 		const SubShapeIDCreator &mSubShapeIDCreator;
+		EBackFaceMode mBackFaceMode = EBackFaceMode::IgnoreBackFaces;
 		bool mReturnValue = false;
 		float mDistanceStack[cStackSize];
 	};
@@ -488,6 +490,7 @@ void QuadChunkShape::CastRay(const RayCast &inRay, const RayCastSettings &inRayC
 	};
 
 	Visitor visitor(this, inRay, inSubShapeIDCreator, ioCollector);
+	visitor.mBackFaceMode = inRayCastSettings.mBackFaceModeTriangles;
 	CastRayT(visitor);
 }
 

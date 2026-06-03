@@ -11,7 +11,7 @@ namespace SSK {
 
 #pragma pack(push, 1)
 struct Block {
-    uint32_t blockId : 17;
+    uint32_t blockId : 16;
     uint32_t x : 5;
     uint32_t y : 5;
     uint32_t z : 5;
@@ -25,6 +25,7 @@ public:
     static constexpr int32_t SIZE_1D = 16;
     static constexpr int32_t SIZE_2D = SIZE_1D * SIZE_1D;
     static constexpr int32_t SIZE_3D = SIZE_2D * SIZE_1D;
+    static constexpr int32_t SUB_GRID_SCALE = 24;
 
     enum QuadDir {
         QUAD_DIR_EMPTY,

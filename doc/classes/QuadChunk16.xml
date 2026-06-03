@@ -51,6 +51,8 @@
 		</constant>
 		<constant name="SIZE_3D" value="4096">
 		</constant>
+		<constant name="SUB_GRID_SCALE" value="24">
+		</constant>
 		<constant name="QUAD_DIR_EMPTY" value="0" enum="QuadDir">
 		</constant>
 		<constant name="QUAD_DIR_POS" value="1" enum="QuadDir">
