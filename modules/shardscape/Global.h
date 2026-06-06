@@ -11,7 +11,6 @@ public:
 	// Mirror of Env/chunk/MaskResource.cs flags for ease of use in C++
     enum Property {
         PROPERTY_SHARP        = 1 << 8,
-        PROPERTY_INTERACTABLE = 1 << 9,
         PROPERTY_LIQUID       = 1 << 10,
         PROPERTY_GAS          = 1 << 11,
     };

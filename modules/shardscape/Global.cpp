@@ -22,7 +22,6 @@ Global *Global::get_singleton() {
 RID Global::get_block_props_buffer() const { return buffer_; }
 void Global::_bind_methods() {
     BIND_ENUM_CONSTANT(PROPERTY_SHARP);
-    BIND_ENUM_CONSTANT(PROPERTY_INTERACTABLE);
     BIND_ENUM_CONSTANT(PROPERTY_LIQUID);
     BIND_ENUM_CONSTANT(PROPERTY_GAS);
     ClassDB::bind_method(D_METHOD("set_block_props", "block_properties"), &Global::set_block_props);
