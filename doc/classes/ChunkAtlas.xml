@@ -7,20 +7,15 @@
 	<tutorials>
 	</tutorials>
 	<methods>
-		<method name="get_quad_chunk" qualifiers="const">
-			<return type="QuadChunk16" />
-			<param index="0" name="chunki" type="int" />
-			<description>
-			</description>
-		</method>
 		<method name="get_texture" qualifiers="const">
 			<return type="RID" />
 			<description>
 			</description>
 		</method>
-		<method name="update_chunk">
+		<method name="set_chunk">
 			<return type="void" />
 			<param index="0" name="chunki" type="int" />
+			<param index="1" name="qc" type="QuadChunk16" />
 			<description>
 			</description>
 		</method>

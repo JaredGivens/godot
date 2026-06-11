@@ -28,8 +28,6 @@
 	<constants>
 		<constant name="PROPERTY_SHARP" value="256" enum="Property">
 		</constant>
-		<constant name="PROPERTY_INTERACTABLE" value="512" enum="Property">
-		</constant>
 		<constant name="PROPERTY_LIQUID" value="1024" enum="Property">
 		</constant>
 		<constant name="PROPERTY_GAS" value="2048" enum="Property">

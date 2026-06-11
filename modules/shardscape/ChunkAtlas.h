@@ -20,14 +20,12 @@ public:
     ChunkAtlas();
     ~ChunkAtlas();
 
-    Ref<QuadChunk16> get_quad_chunk(int chunki) const;
-    RID get_texture() const ;
-	void update_chunk(int chunki);
+    RID get_texture() const;
+	void set_chunk(int chunki, Ref<QuadChunk16> qc);
 
 private:
 	RID texture_;
     LocalVector<uint8_t> layer_arrays_[SIZE_1D];
-    LocalVector<Ref<QuadChunk16>> quad_chunks_;
 };
 
 
