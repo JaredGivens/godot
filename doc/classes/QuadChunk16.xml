@@ -40,6 +40,8 @@
 			<param index="0" name="blocki" type="int" />
 			<param index="1" name="position" type="Vector3i" />
 			<param index="2" name="blockId" type="int" />
+			<param index="3" name="active" type="bool" />
+			<param index="4" name="dir" type="int" />
 			<description>
 			</description>
 		</method>

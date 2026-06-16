@@ -25,7 +25,7 @@ void QuadChunk16::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_count"), &QuadChunk16::get_count);
     ClassDB::bind_method(D_METHOD("get_addr"), &QuadChunk16::get_addr);
-    ClassDB::bind_method(D_METHOD("set_block", "blocki", "position", "blockId"), &QuadChunk16::set_block);
+    ClassDB::bind_method(D_METHOD("set_block", "blocki", "position", "blockId", "active", "dir"), &QuadChunk16::set_block);
     ClassDB::bind_method(D_METHOD("get_quad", "blocki", "trii"), &QuadChunk16::get_quad);
     ClassDB::bind_method(D_METHOD("get_compressed"), &QuadChunk16::get_compressed);
     ClassDB::bind_method(D_METHOD("from_compressed", "data"), &QuadChunk16::from_compressed);
@@ -39,15 +39,18 @@ PackedInt64Array QuadChunk16::get_addr() const {
     return arr;
 }
 
-bool QuadChunk16::set_block(int32_t blocki, Vector3i pos, int32_t blockId) {
+bool QuadChunk16::set_block(int32_t blocki, Vector3i pos, int32_t blockId, bool active, int32_t dir) {
     if (blocki < 0 || blocki >= SIZE_3D) return false;
     Block *b = blocks() + blocki;
-    bool changed = (b->x != (pos.x & 31)) || (b->y != (pos.y & 31)) || (b->z != (pos.z & 31)) || (b->blockId != blockId);
+    bool changed = (b->x != (pos.x & 31)) || (b->y != (pos.y & 31)) || (b->z != (pos.z & 31))
+            || (b->blockId != (blockId & 0x1FFF)) || (b->active != (uint32_t)active) || (b->dir != (dir & 7));
     b->x = pos.x & 31;
     b->y = pos.y & 31;
     b->z = pos.z & 31;
     count_ += (blockId != 0) - (b->blockId != 0);
     b->blockId = blockId;
+    b->active = active;
+    b->dir = dir;
     return changed;
 }
 
