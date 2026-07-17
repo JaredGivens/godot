@@ -38,8 +38,9 @@ public:
     QuadChunk16();
     int32_t get_count() const;
     PackedInt64Array get_addr() const;
-    bool set_block(int32_t blocki, Vector3i pos, int32_t blockId, bool active, int32_t dir);
+    bool set_block(int32_t blocki, Vector3i pos, int32_t blockId, int32_t automata);
     int get_tri(int32_t blocki, int32_t trii, float *outFloats) const;
+    PackedVector3Array get_tri_verts(int32_t blocki, int32_t trii) const;
     PackedInt32Array get_quad(int32_t blocki, int32_t trii) const;
     PackedByteArray get_compressed() const;
     bool from_compressed(PackedByteArray data);

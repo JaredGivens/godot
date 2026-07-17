@@ -25,7 +25,8 @@ void QuadChunk16::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_count"), &QuadChunk16::get_count);
     ClassDB::bind_method(D_METHOD("get_addr"), &QuadChunk16::get_addr);
-    ClassDB::bind_method(D_METHOD("set_block", "blocki", "position", "blockId", "active", "dir"), &QuadChunk16::set_block);
+    ClassDB::bind_method(D_METHOD("set_block", "blocki", "position", "blockId", "automata"), &QuadChunk16::set_block);
+    ClassDB::bind_method(D_METHOD("get_tri_verts", "blocki", "trii"), &QuadChunk16::get_tri_verts);
     ClassDB::bind_method(D_METHOD("get_quad", "blocki", "trii"), &QuadChunk16::get_quad);
     ClassDB::bind_method(D_METHOD("get_compressed"), &QuadChunk16::get_compressed);
     ClassDB::bind_method(D_METHOD("from_compressed", "data"), &QuadChunk16::from_compressed);
@@ -39,8 +40,10 @@ PackedInt64Array QuadChunk16::get_addr() const {
     return arr;
 }
 
-bool QuadChunk16::set_block(int32_t blocki, Vector3i pos, int32_t blockId, bool active, int32_t dir) {
+bool QuadChunk16::set_block(int32_t blocki, Vector3i pos, int32_t blockId, int32_t automata) {
     if (blocki < 0 || blocki >= SIZE_3D) return false;
+    bool active = automata & 1;
+    int32_t dir = automata >> 1;
     Block *b = blocks() + blocki;
     bool changed = (b->x != (pos.x & 31)) || (b->y != (pos.y & 31)) || (b->z != (pos.z & 31))
             || (b->blockId != (blockId & 0x1FFF)) || (b->active != (uint32_t)active) || (b->dir != (dir & 7));
@@ -104,6 +107,18 @@ int QuadChunk16::get_tri(int32_t blocki, int32_t trii, float *outFloats) const {
     outFloats[3] = vt1.x; outFloats[4] = vt1.y; outFloats[5] = vt1.z;
     outFloats[6] = vt3.x; outFloats[7] = vt3.y; outFloats[8] = vt3.z;
     return 0;
+}
+
+PackedVector3Array QuadChunk16::get_tri_verts(int32_t blocki, int32_t trii) const {
+    PackedVector3Array res;
+    float f[9];
+    if (get_tri(blocki, trii, f) != 0) return res;
+    res.resize(3);
+    Vector3 *w = res.ptrw();
+    w[0] = Vector3(f[0], f[1], f[2]);
+    w[1] = Vector3(f[3], f[4], f[5]);
+    w[2] = Vector3(f[6], f[7], f[8]);
+    return res;
 }
 
 PackedInt32Array QuadChunk16::get_quad(int32_t blocki, int32_t trii) const {
