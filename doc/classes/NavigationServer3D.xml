@@ -298,6 +298,14 @@
 				Replaces the internal velocity in the collision avoidance simulation with [param velocity] for the specified [param agent]. When an agent is teleported to a new position this function should be used in the same frame. If called frequently this function can get agents stuck.
 			</description>
 		</method>
+		<method name="bake_from_quad_chunks">
+			<return type="void" />
+			<param index="0" name="navigation_mesh" type="NavigationMesh" />
+			<param index="1" name="source_geometry_data" type="NavigationMeshSourceGeometryData3D" />
+			<param index="2" name="callback" type="Callable" default="Callable()" />
+			<description>
+			</description>
+		</method>
 		<method name="bake_from_source_geometry_data">
 			<return type="void" />
 			<param index="0" name="navigation_mesh" type="NavigationMesh" />

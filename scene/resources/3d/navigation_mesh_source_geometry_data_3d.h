@@ -40,6 +40,10 @@ class NavigationMeshSourceGeometryData3D : public Resource {
 	Vector<float> vertices;
 	Vector<int> indices;
 
+	// Transient, process-local QuadChunk16* handles (see get_addr). Never serialized.
+	Vector<int64_t> quad_chunk_addrs;
+	Vector<Transform3D> quad_chunk_xforms;
+
 	AABB bounds;
 	bool bounds_dirty = true;
 
@@ -91,6 +95,9 @@ public:
 	void add_mesh(const Ref<Mesh> &p_mesh, const Transform3D &p_xform);
 	void add_mesh_array(const Array &p_mesh_array, const Transform3D &p_xform);
 	void add_faces(const PackedVector3Array &p_faces, const Transform3D &p_xform);
+
+	void add_quad_chunk(int64_t p_addr, const Transform3D &p_xform);
+	void get_quad_chunk_data(Vector<int64_t> &r_addrs, Vector<Transform3D> &r_xforms);
 
 	void merge(const Ref<NavigationMeshSourceGeometryData3D> &p_other_geometry);
 

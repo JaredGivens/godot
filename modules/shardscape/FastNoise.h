@@ -16,7 +16,15 @@ public:
     }
 
     void delete_node_ref() {
-        fnDeleteNodeRef(node_);
+        if (node_ != nullptr) {
+            fnDeleteNodeRef(node_);
+            node_ = nullptr;
+        }
+    }
+
+    // Without this the node ref outlives the wrapper and FastNoise's pool asserts on leaked slots.
+    ~FastNoise() {
+        delete_node_ref();
     }
 
     // Node information
@@ -223,7 +231,7 @@ static void _bind_methods() {
     ClassDB::bind_method(D_METHOD("set_hybrid_float", "hybridIndex", "value"), &FastNoise::set_hybrid_float);
 }
 private:
-    void *node_;
+    void *node_ = nullptr;
     LocalVector<float> noiseOut_;
 };
 }

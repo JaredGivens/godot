@@ -30,13 +30,13 @@ public:
 	QuadChunkShape(const QuadChunkShapeSettings &inSettings, ShapeResult &outResult);
 	const SSK::QuadChunk16 *mQuadChunk;
 
-	virtual bool MustBeStatic() const override { return true; }
+	virtual bool MustBeStatic() const override { return false; }
 	// See Shape::GetLocalBounds
-	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk16::SIZE_1D + 3)); }
+	virtual AABox GetLocalBounds() const override { return AABox(Vec3::sReplicate(-2), Vec3::sReplicate(SSK::QuadChunk16::kSize1D + 3)); }
 	// See Shape::GetSubShapeIDBitsRecursive
 	virtual uint GetSubShapeIDBitsRecursive() const override { return cSubShapeIDBits; }
 	// See Shape::GetInnerRadius
-	virtual float GetInnerRadius() const override { return SSK::QuadChunk16::SIZE_1D / 2.0F; }
+	virtual float GetInnerRadius() const override { return SSK::QuadChunk16::kSize1D / 2.0F; }
 	// See Shape::GetMassProperties
 	virtual MassProperties GetMassProperties() const override;
 

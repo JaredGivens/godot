@@ -43,6 +43,7 @@ dependencies {
 
     implementation "androidx.fragment:fragment:$versions.fragmentVersion"
     implementation "androidx.core:core-splashscreen:$versions.splashscreenVersion"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
 
     if (rootProject.findProject(":lib")) {
         implementation project(":lib")
@@ -89,6 +90,7 @@ android {
     ndkVersion versions.ndkVersion
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility versions.javaVersion
         targetCompatibility versions.javaVersion
     }

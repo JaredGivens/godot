@@ -859,13 +859,8 @@ void RenderForwardMobile::_render_scene(RenderDataRD *p_render_data, const Color
 	bool ce_has_pre_transparent = _has_compositor_effect(RS::COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT, p_render_data);
 	bool ce_has_post_transparent = _has_compositor_effect(RS::COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_TRANSPARENT, p_render_data);
 
-	if (ce_has_post_opaque) {
-		// As we're doing opaque and sky in subpasses we don't support this *yet*
-		WARN_PRINT_ONCE("Post opaque rendering effect callback is not supported in the mobile renderer");
-	}
-
 	// Using RenderingEffects limits our ability to do subpasses..
-	if (ce_has_pre_transparent) {
+	if (ce_has_post_opaque || ce_has_pre_transparent) {
 		merge_transparent_pass = false;
 		using_subpass_post_process = false;
 	}
@@ -1291,6 +1286,9 @@ void RenderForwardMobile::_render_scene(RenderDataRD *p_render_data, const Color
 			RD::get_singleton()->draw_command_end_label(); // Render 3D Pass / Render Reflection Probe Pass
 
 			// rendering effects
+			if (ce_has_post_opaque) {
+				_process_compositor_effects(RS::COMPOSITOR_EFFECT_CALLBACK_TYPE_POST_OPAQUE, p_render_data);
+			}
 			if (ce_has_pre_transparent) {
 				_process_compositor_effects(RS::COMPOSITOR_EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT, p_render_data);
 			}

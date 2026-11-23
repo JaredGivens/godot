@@ -13,19 +13,30 @@ protected:
     static void _bind_methods();
 
 public:
-    static constexpr int32_t SIZE_1D = 16;
+    // Sub-chunks per atlas axis, power of 2. Mirror of the C# Env.SubChunk.MapDimLen
+    // (= Glob.MapDimLen * 2) — Glob.CheckMapMirrors() errors at startup if they drift.
+    static constexpr int32_t SIZE_1D = 8;
     static constexpr int32_t SIZE_2D = SIZE_1D * SIZE_1D;
     static constexpr int32_t SIZE_3D = SIZE_2D * SIZE_1D;
+    static constexpr int32_t LIST_STRIDE = 15 * 15 * 15 + 1;
+    static constexpr int32_t PASSES = 2;
 
     ChunkAtlas();
     ~ChunkAtlas();
 
     RID get_texture() const;
+    RID get_cell_buffer() const;
+    RID get_count_buffer() const;
+    RID get_rank_buffer() const;
+    PackedInt32Array get_counts() const;
 	void set_chunk(int chunki, Ref<QuadChunk16> qc);
 
 private:
 	RID texture_;
-    LocalVector<uint8_t> layer_arrays_[SIZE_1D];
+	RID cells_;
+	RID counts_;
+	RID ranks_;
+	PackedInt32Array counts_cpu_;
 };
 
 

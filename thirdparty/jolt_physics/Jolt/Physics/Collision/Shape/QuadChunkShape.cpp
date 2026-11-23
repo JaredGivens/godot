@@ -2,23 +2,13 @@
 #include "modules/shardscape/QuadChunk16.h"
 #include "modules/shardscape/vector3u4.h"
 
-#include <Jolt/AABBTree/AABBTreeBuilder.h>
-#include <Jolt/AABBTree/AABBTreeToBuffer.h>
-#include <Jolt/AABBTree/NodeCodec/NodeCodecQuadTreeHalfFloat.h>
-#include <Jolt/AABBTree/TriangleCodec/TriangleCodecIndexed8BitPackSOA4Flags.h>
 #include <Jolt/Core/Profiler.h>
 #include <Jolt/Core/StreamIn.h>
 #include <Jolt/Core/StreamOut.h>
-#include <Jolt/Core/StringTools.h>
-#include <Jolt/Core/UnorderedMap.h>
-#include <Jolt/Geometry/AABox4.h>
-#include <Jolt/Geometry/Indexify.h>
 #include <Jolt/Geometry/OrientedBox.h>
-#include <Jolt/Geometry/Plane.h>
 #include <Jolt/Geometry/RayAABox.h>
+#include <Jolt/Geometry/RayTriangle.h>
 #include <Jolt/Math/UVec4.h>
-#include <Jolt/ObjectStream/TypeDeclarations.h>
-#include <Jolt/Physics/Collision/ActiveEdges.h>
 #include <Jolt/Physics/Collision/CastConvexVsTriangles.h>
 #include <Jolt/Physics/Collision/CastResult.h>
 #include <Jolt/Physics/Collision/CastSphereVsTriangles.h>
@@ -34,80 +24,92 @@
 #include <Jolt/Physics/Collision/ShapeCast.h>
 #include <Jolt/Physics/Collision/ShapeFilter.h>
 #include <Jolt/Physics/Collision/TransformedShape.h>
-#include <Jolt/TriangleSplitter/TriangleSplitterBinning.h>
 #include <cfloat>
-#include <climits>
 #include <cstdint>
+#include <cstring>
 
 JPH_NAMESPACE_BEGIN
 
-static constexpr uint32_t cStackSize = 256; // Stack size for blocks
 using QC = SSK::QuadChunk16;
 
-/// This function will sort values from high to low and only keep the ones that are less than inMaxValue
-/// @param inValues Values to be sorted
-/// @param inMaxValue Values need to be less than this to keep them
-/// @param ioIdentifiers 8 identifiers that will be sorted in the same way as the values
-/// @param outValues The values are stored here from high to low
-/// @return The number of values that were kept
-JPH_INLINE int32_t SortReverseAndStore8(float inValues[8], float inMaxValue, uint32_t ioIdentifiers[8], float *outValues)
-{
-	// Sort so that highest values are first (we want to first process closer hits and we process stack top to bottom)
-	for (int32_t i = 0; i < 7; ++i) {
-		int32_t maxIndex = i;
-		for (int32_t j = i + 1; j < 8; ++j) {
-			if (inValues[j] > inValues[maxIndex]) {
-				maxIndex = j;
+static constexpr float kDensity = 1000.0f;
+static constexpr int32_t kOwnerMax = QC::kSize1D - 2;
+
+class FaceCursor {
+public:
+	FaceCursor() = default;
+
+	explicit FaceCursor(const AABox &inLocalBox) {
+		Vec3 lo = Vec3::sClamp(inLocalBox.mMin, Vec3::sReplicate(-2.0f), Vec3::sReplicate(QC::kSize1D + 1.0f));
+		Vec3 hi = Vec3::sClamp(inLocalBox.mMax, Vec3::sReplicate(-2.0f), Vec3::sReplicate(QC::kSize1D + 1.0f));
+		for (int32_t i = 0; i < 3; ++i) {
+			mLo[i] = MAX((int32_t)floorf(lo[i]) - 1, 0);
+			mHi[i] = MIN((int32_t)floorf(hi[i]), kOwnerMax);
+			if (mLo[i] > mHi[i]) {
+				return;
 			}
 		}
-		// swap
-		float ftemp = inValues[i];
-		inValues[i] = inValues[maxIndex];
-		inValues[maxIndex] = ftemp;
-		int32_t itemp = ioIdentifiers[i];
-		ioIdentifiers[i] = ioIdentifiers[maxIndex];
-		ioIdentifiers[maxIndex] = itemp;
-
+		mLaneMask = ((1u << (2 * mHi[0] + 2)) - 1) & ~((1u << (2 * mLo[0])) - 1);
+		mY = mLo[1];
+		mZ = mLo[2];
+		mAxis = -1;
+		mDone = false;
 	}
 
-	// Keep only results < inMaxValue
-	int32_t num_results = 0;
-	for (int32_t i = 0; i < 8; ++i) {
-		if (inValues[i] < inMaxValue) {
-			outValues[num_results] = inValues[i];
-			ioIdentifiers[num_results] = ioIdentifiers[i];
-			++num_results;
+	JPH_INLINE bool IsDone() const { return mDone; }
+
+	template <class Visitor>
+	void Walk(const QC *inQuadChunk, Visitor &ioVisitor) {
+		if (mAxis < 0) {
+			mAxis = 0;
+			mBits = inQuadChunk->face_row(0, mY, mZ) & mLaneMask;
+		}
+		while (!mDone) {
+			while (mBits != 0) {
+				if (ioVisitor.ShouldAbort()) {
+					return;
+				}
+				uint32_t cell = (uint32_t)(__builtin_ctz(mBits) >> 1) | (uint32_t)mY << 4 | (uint32_t)mZ << 8;
+				mBits &= mBits - 1;
+				ioVisitor.VisitTriangle(cell, mAxis * 2);
+				ioVisitor.VisitTriangle(cell, mAxis * 2 + 1);
+			}
+			if (++mY > mHi[1]) {
+				mY = mLo[1];
+				if (++mZ > mHi[2]) {
+					mZ = mLo[2];
+					if (++mAxis == 3) {
+						mDone = true;
+						return;
+					}
+				}
+			}
+			mBits = inQuadChunk->face_row(mAxis, mY, mZ) & mLaneMask;
 		}
 	}
 
-	return num_results;
+private:
+	int32_t mLo[3] = {};
+	int32_t mHi[3] = {};
+	int32_t mY = 0;
+	int32_t mZ = 0;
+	int32_t mAxis = 0;
+	uint32_t mBits = 0;
+	uint32_t mLaneMask = 0;
+	bool mDone = true;
+};
+
+template <class Visitor>
+static JPH_INLINE void WalkBox(const QC *inQuadChunk, const AABox &inLocalBox, Visitor &ioVisitor) {
+	JPH_PROFILE_FUNCTION();
+	RWLockRead guard(inQuadChunk->lock_);
+	FaceCursor cursor(inLocalBox);
+	cursor.Walk(inQuadChunk, ioVisitor);
 }
 
-/// Shift the elements so that the identifiers that correspond with the trues in inValue come first
-/// @param inValue Values to test for true or false
-/// @param ioIdentifiers the identifiers that are shifted, on return they are shifted
-/// @return The number of trues
- JPH_INLINE int CountAndSortTrues8(uint32_t inValues[8], uint32_t ioIdentifiers[8])
-{
-    uint32_t tmp_ids[8];
-    int n_true = 0, n_false = 0;
-
-    // First pass: stable partition into tmp_ids (trues at front)
-    for (int i = 0; i < 8; ++i)
-    {
-        if (inValues[i])
-            tmp_ids[n_true++] = ioIdentifiers[i];
-        else
-            tmp_ids[7 - (n_false++)] = ioIdentifiers[i]; // store falses from the back
-    }
-
-    // Write back: trues first, then falses (contiguous)
-    for (int i = 0; i < n_true; ++i) { ioIdentifiers[i] = tmp_ids[i]; inValues[i] = 1; }
-    for (int i = 0; i < 8 - n_true; ++i) { ioIdentifiers[n_true + i] = tmp_ids[7 - i]; inValues[n_true + i] = 0; }
-
-    return n_true;
+static JPH_INLINE AABox sChunkBox() {
+	return AABox(Vec3::sZero(), Vec3::sReplicate((float)QC::kSize1D));
 }
-
 
 ShapeSettings::ShapeResult QuadChunkShapeSettings::Create() const {
 	if (mCachedResult.IsEmpty()) {
@@ -127,17 +129,16 @@ QuadChunkShape::QuadChunkShape(const QuadChunkShapeSettings &inSettings, ShapeRe
 }
 
 MassProperties QuadChunkShape::GetMassProperties() const {
-	// We cannot calculate the volume for an arbitrary mesh, so we return invalid mass properties.
-	// If you want your mesh to be dynamic, then you should provide the mass properties yourself when
-	// creating a Body:
-	//
-	// BodyCreationSettings::mOverrideMassProperties = EOverrideMassProperties::MassAndInertiaProvided;
-	// BodyCreationSettings::mMassPropertiesOverride.SetMassAndInertiaOfSolidBox(Vec3::sReplicate(1.0f), 1000.0f);
-	//
-	// Note that for a mesh shape to simulate properly, it is best if the mesh is manifold
-	// (i.e. closed, all edges shared by only two triangles, consistent winding order).
-	return MassProperties();
+	RWLockRead guard(mQuadChunk->lock_);
+	Vector3i lo;
+	Vector3i hi;
+	int32_t count = mQuadChunk->occupied_bounds(lo, hi);
+	MassProperties p;
+	p.SetMassAndInertiaOfSolidBox(Vec3(float(hi.x - lo.x + 1), float(hi.y - lo.y + 1), float(hi.z - lo.z + 1)), kDensity);
+	p.ScaleToMass(float(MAX(count, 1)) * kDensity);
+	return p;
 }
+
 const PhysicsMaterial *QuadChunkShape::GetMaterial(const SubShapeID &inSubShapeID) const {
 	return JPH::PhysicsMaterial::sDefault;
 }
@@ -145,7 +146,7 @@ const PhysicsMaterial *QuadChunkShape::GetMaterial(const SubShapeID &inSubShapeI
 SubShapeID QuadChunkShape::EncodeSubShapeID(const SubShapeIDCreator &inCreator, uint32_t inHex, uint32_t inTriangle) const {
 	return inCreator.PushID(inHex | inTriangle << 12, cSubShapeIDBits).GetID();
 }
-// returns 0 on success and 1 on fail
+
 int QuadChunkShape::DecodeTriangle(uint32_t inHexi, uint32_t inTrii, Vec3 outVerts[3]) const {
 	float floats[9];
 	if (mQuadChunk->get_tri(inHexi, inTrii, floats)) {
@@ -159,7 +160,6 @@ int QuadChunkShape::DecodeTriangle(uint32_t inHexi, uint32_t inTrii, Vec3 outVer
 }
 
 void QuadChunkShape::DecodeSubShapeID(const SubShapeID &inSubShapeID, uint32_t &outHex, uint32_t &outTriangle) const {
-	// Get block
 	SubShapeID remainder;
 	uint32_t id = inSubShapeID.PopID(cSubShapeIDBits, remainder);
 	JPH_ASSERT(remainder.IsEmpty(), "Invalid subshape ID");
@@ -169,60 +169,42 @@ void QuadChunkShape::DecodeSubShapeID(const SubShapeID &inSubShapeID, uint32_t &
 }
 
 Vec3 QuadChunkShape::GetSurfaceNormal(const SubShapeID &inSubShapeID, Vec3Arg inLocalSurfacePosition) const {
-	// Decode ID
 	uint32_t face;
 	uint32_t triangle_idx;
 	DecodeSubShapeID(inSubShapeID, face, triangle_idx);
 
-	// Decode triangle
 	Vec3 verts[3];
+	RWLockRead guard(mQuadChunk->lock_);
 	if (DecodeTriangle(face, triangle_idx, verts)) {
 		return Vec3::sAxisY();
 	}
 
-	// Calculate normal
-	return (verts[2] - verts[1]).Cross(verts[0] - verts[1]).Normalized();
+	return (verts[0] - verts[1]).Cross(verts[2] - verts[1]).Normalized();
 }
 
 void QuadChunkShape::GetSupportingFace(const SubShapeID &inSubShapeID, Vec3Arg inDirection, Vec3Arg inScale, Mat44Arg inCenterOfMassTransform, SupportingFace &outVertices) const {
-	// Decode ID
 	uint32_t face;
 	uint32_t triangle_idx;
 	DecodeSubShapeID(inSubShapeID, face, triangle_idx);
 
-	// Decode triangle
 	outVertices.resize(3);
-	if (DecodeTriangle(face, triangle_idx, &outVertices[0])) {
-		return;
+	{
+		RWLockRead guard(mQuadChunk->lock_);
+		if (DecodeTriangle(face, triangle_idx, &outVertices[0])) {
+			return;
+		}
 	}
 
-	// Flip triangle if scaled inside out
 	if (ScaleHelpers::IsInsideOut(inScale)) {
 		std::swap(outVertices[1], outVertices[2]);
 	}
 
-	// Calculate transform with scale
 	Mat44 transform = inCenterOfMassTransform.PreScaled(inScale);
 
-	// Transform to world space
 	for (Vec3 &v : outVertices) {
 		v = transform * v;
 	}
 }
-
-template <typename Visitor>
- void VisitStarT(Visitor &ioVisitor, int32_t xyz) {
-     for (int32_t i = 0; i < 12; ++i) {
-         auto ax = i >> 2;
-         int comp[3] = { (xyz >> 0) & 0xF, (xyz >> 4) & 0xF, (xyz >> 8) & 0xF };
-         comp[~ax & 1] -= (~i >> 0) & 1;
-         comp[~ax & 2] -= (~i >> 1) & 1;
-         auto v3u4 = Vector3u4(comp[0], comp[1], comp[2]);
-         if (v3u4.is_invalid()) continue;
-         ioVisitor.VisitTriangle(v3u4.packed, ax * 2);
-         ioVisitor.VisitTriangle(v3u4.packed, ax * 2 + 1);
-     }
- }
 
 #ifdef JPH_DEBUG_RENDERER
 void QuadChunkShape::Draw(DebugRenderer *inRenderer, RMat44Arg inCenterOfMassTransform, Vec3Arg inScale, ColorArg inColor, bool inUseMaterialColors, bool inDrawWireframe) const {
@@ -230,158 +212,108 @@ void QuadChunkShape::Draw(DebugRenderer *inRenderer, RMat44Arg inCenterOfMassTra
 }
 #endif
 
-class DecodingContext {
-public:
-	static constexpr uint32_t cNumBitsXYZ = 4; // 4 bits each for x, y, z (32 blocks per dimension)
-	static constexpr uint32_t cMaskBitsXYZ = (1 << cNumBitsXYZ) - 1;
-	static constexpr uint32_t cLevelShift = 3 * cNumBitsXYZ; // 12 bits total for xyz
-
-	JPH_INLINE explicit DecodingContext() : mTop(7) {
-		// Initialize stack with root block (level 0, x=0, y=0, z=0)
-		for (uint32_t i = 0; i < 8; ++i) {
-			int32_t offset_x = ((i >> 0) & 1) * (QC::SIZE_1D >> 1);
-			int32_t offset_y = ((i >> 1) & 1) * (QC::SIZE_1D >> 1);
-			int32_t offset_z = ((i >> 2) & 1) * (QC::SIZE_1D >> 1);
-			mPropertiesStack[i] = (1 << cLevelShift)
-				| (offset_z << (cNumBitsXYZ * 2))
-				| (offset_y << (cNumBitsXYZ * 1))
-				| (offset_x << (cNumBitsXYZ * 0));
+template <typename Visit>
+static JPH_INLINE void VisitCellOwners(const QC *inQuadChunk, uint32_t inCell, uint32_t *ioVisited, Visit &inVisit) {
+	int32_t c[3] = { (int32_t)(inCell & 15), (int32_t)((inCell >> 4) & 15), (int32_t)((inCell >> 8) & 15) };
+	for (int32_t a = 0; a < 3; ++a) {
+		int32_t u = (a + 1) % 3;
+		int32_t w = (a + 2) % 3;
+		for (int32_t d = 0; d < 4; ++d) {
+			int32_t b[3] = { c[0], c[1], c[2] };
+			b[u] -= d & 1;
+			b[w] -= d >> 1;
+			if (b[0] < 0 || b[1] < 0 || b[2] < 0 || b[0] > kOwnerMax || b[1] > kOwnerMax || b[2] > kOwnerMax) {
+				continue;
+			}
+			if (((inQuadChunk->face_row(a, b[1], b[2]) >> (b[0] * 2)) & 1) == 0) {
+				continue;
+			}
+			uint32_t owner = (uint32_t)(b[0] | b[1] << 4 | b[2] << 8);
+			uint32_t bit = owner * 3 + (uint32_t)a;
+			if ((ioVisited[bit >> 5] >> (bit & 31)) & 1) {
+				continue;
+			}
+			ioVisited[bit >> 5] |= 1u << (bit & 31);
+			inVisit(owner, (uint32_t)a * 2);
+			inVisit(owner, (uint32_t)a * 2 + 1);
 		}
 	}
+}
 
-	template <class Visitor>
-	JPH_INLINE void WalkQuads(Visitor &ioVisitor) {
-		JPH_PROFILE_FUNCTION();
+template <typename OnHit>
+static void CastRayT(const QuadChunkShape *inShape, Vec3Arg inOrigin, Vec3Arg inDirection, EBackFaceMode inBackFaceMode, OnHit &&inOnHit) {
+	JPH_PROFILE_FUNCTION();
+	const QC *qc = inShape->mQuadChunk;
+	RWLockRead guard(qc->lock_);
+	auto minBounds = Vec3::sReplicate(0);
+	auto maxBounds = Vec3::sReplicate(QC::kSize1D - 0.01);
+	auto rayInvDir = RayInvDirection(inDirection);
+	float distance = RayAABox(inOrigin, rayInvDir, minBounds, maxBounds);
+	if (distance == FLT_MAX) {
+		return;
+	}
 
-		// Early out if there's no collision
-		if (ioVisitor.mShape->mQuadChunk->get_count() == 0) {
+	float lanes[9][4] = {};
+	uint32_t ids[4] = {};
+	int32_t count = 0;
+	auto flush = [&]() {
+		Vec4 fractions = RayTriangle4(inOrigin, inDirection,
+				Vec4(lanes[0][0], lanes[0][1], lanes[0][2], lanes[0][3]),
+				Vec4(lanes[1][0], lanes[1][1], lanes[1][2], lanes[1][3]),
+				Vec4(lanes[2][0], lanes[2][1], lanes[2][2], lanes[2][3]),
+				Vec4(lanes[3][0], lanes[3][1], lanes[3][2], lanes[3][3]),
+				Vec4(lanes[4][0], lanes[4][1], lanes[4][2], lanes[4][3]),
+				Vec4(lanes[5][0], lanes[5][1], lanes[5][2], lanes[5][3]),
+				Vec4(lanes[6][0], lanes[6][1], lanes[6][2], lanes[6][3]),
+				Vec4(lanes[7][0], lanes[7][1], lanes[7][2], lanes[7][3]),
+				Vec4(lanes[8][0], lanes[8][1], lanes[8][2], lanes[8][3]));
+		for (int32_t i = 0; i < count; ++i) {
+			if (fractions[i] != FLT_MAX) {
+				inOnHit(fractions[i], ids[i] & 0xFFF, ids[i] >> 12);
+			}
+		}
+		memset(lanes, 0, sizeof(lanes));
+		count = 0;
+	};
+	auto visit = [&](uint32_t inCell, uint32_t inTri) {
+		Vec3 v[3];
+		if (inShape->DecodeTriangle(inCell, inTri, v)) {
 			return;
 		}
-
-		do {
-			uint32_t properties = mPropertiesStack[mTop];
-			uint32_t xyz = properties & ((1 << cLevelShift) - 1); // Extract xyz from properties
-			uint32_t level = properties >> cLevelShift;
-			if (level == cNumBitsXYZ) {
-				// Leaf node: Process faces in this block
-				VisitStarT(ioVisitor, xyz);
-			} else {
-				// Non-leaf node: Subdivide and push child blocks
-				ProcessBranchBlock(ioVisitor, xyz, level);
-			}
-
-			// Check for early termination
-			if (ioVisitor.ShouldAbort()) {
-				return;
-			}
-
-			// Fetch next block
-			do {
-				--mTop;
-			} while (mTop >= 0 && !ioVisitor.ShouldVisitRangeBlock(mTop));
-		} while (mTop >= 0);
-	}
-
-	JPH_INLINE bool IsDoneWalking() const {
-		return mTop < 0;
-	}
-
-
-private:
-	int32_t mTop;
-	uint32_t mPropertiesStack[cStackSize];
-
-private:
-	// Process a non-leaf block by subdividing
-	template <class Visitor>
-	JPH_INLINE void ProcessBranchBlock(Visitor &ioVisitor, int32_t xyz, uint32_t level) {
-		int32_t x = (xyz >> (cNumBitsXYZ * 0)) & cMaskBitsXYZ;
-		int32_t y = (xyz >> (cNumBitsXYZ * 1)) & cMaskBitsXYZ;
-		int32_t z = (xyz >> (cNumBitsXYZ * 2)) & cMaskBitsXYZ;
-		// Calculate block size at this level
-		int32_t block_size = QC::SIZE_1D >> (level + 1);
-
-		// Calculate base position
-		Vec3 base_pos = Vec3(x, y, z);
-
-		// Define 8 child blocks
-		Mat44 block_min0, block_min1, block_max0, block_max1;
-		uint32_t properties[8];
-		for (uint32_t i = 0; i < 8; ++i) {
-			int32_t offset_x = ((i >> 0) & 1) * block_size;
-			int32_t offset_y = ((i >> 1) & 1) * block_size;
-			int32_t offset_z = ((i >> 2) & 1) * block_size;
-			auto offset = Vec3(offset_x, offset_y, offset_z);
-			if (i < 4) {
-				block_min0.SetColumn4(i, Vec4(base_pos + offset));
-				block_max0.SetColumn4(i, Vec4(base_pos + offset + Vec3::sReplicate(block_size)));
-			} else {
-				block_min1.SetColumn4(i - 4, Vec4(base_pos + offset));
-				block_max1.SetColumn4(i - 4, Vec4(base_pos + offset + Vec3::sReplicate(block_size)));
-			}
-			properties[i] = ((level + 1) << cLevelShift)
-				| ((z + offset_z) << (cNumBitsXYZ * 2))
-				| ((y + offset_y) << (cNumBitsXYZ * 1))
-				| ((x + offset_x) << (cNumBitsXYZ * 0));
+		if (inBackFaceMode == EBackFaceMode::IgnoreBackFaces && (v[2] - v[0]).Cross(v[1] - v[0]).Dot(inDirection) < 0) {
+			return;
 		}
-
-		Mat44 transposed_min0 = block_min0.Transposed();
-		Mat44 transposed_max0 = block_max0.Transposed();
-		Mat44 transposed_min1 = block_min1.Transposed();
-		Mat44 transposed_max1 = block_max1.Transposed();
-		// Test child blocks
-		uint32_t colliding_blocks[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-		int32_t num_results = ioVisitor.VisitRangeBlock(
-				transposed_min0, transposed_max0,
-                transposed_min1, transposed_max1,
-				colliding_blocks, mTop);
-
-		// Push colliding blocks onto stack
-		JPH_ASSERT(mTop + num_results < cStackSize);
-		for (int32_t i = num_results - 1; i >= 0; --i) {
-			mPropertiesStack[mTop + i] = properties[colliding_blocks[i]];
+		for (int32_t k = 0; k < 3; ++k) {
+			lanes[k * 3 + 0][count] = v[k].GetX();
+			lanes[k * 3 + 1][count] = v[k].GetY();
+			lanes[k * 3 + 2][count] = v[k].GetZ();
 		}
-		mTop += num_results;
-	}
-};
+		ids[count++] = inCell | inTri << 12;
+		if (count == 4) {
+			flush();
+		}
+	};
 
-template <typename Visitor>
-void CastRayT(Visitor &ioVisitor) {
-	JPH_PROFILE_FUNCTION();
-	auto minBounds = Vec3::sReplicate(0);
-	auto maxBounds = Vec3::sReplicate(QC::SIZE_1D - 0.01);
-	Vec3 rayOrigin = ioVisitor.mRayOrigin;
-	Vec3 rayDir = ioVisitor.mRayDirection;
-	auto rayInvDir = RayInvDirection(rayDir);
-	float distance = RayAABox(rayOrigin, rayInvDir, minBounds, maxBounds);
-	if (distance == FLT_MAX) {
-		return; // Ray misses chunk or is beyond early-out distance
-	}
+	uint32_t visited[QC::kSize3D * 3 / 32] = {};
 
-	auto end = rayOrigin + rayDir;
+	auto end = inOrigin + inDirection;
 	auto end_v3u4 = Vector3u4(floor(end.GetX()), floor(end.GetY()), floor(end.GetZ()));
-	Vec3 startPos = rayOrigin;
+	Vec3 startPos = inOrigin;
 	if (distance > 0) {
-		startPos += rayDir * distance;
+		startPos += inDirection * distance;
 	}
 
 	UVec4 startPosU = startPos.ToInt();
 	Vector3u4 xyz(startPosU.GetX(), startPosU.GetY(), startPosU.GetZ());
 
-	Vec3 step =  rayDir.GetSign();
-	// get the fractional portions of the float of the starting position
-	// 1 - n for negetive components
+	Vec3 step = inDirection.GetSign();
 	constexpr float LARGE = float(1 << 16);
 	auto tDelta = UVec4::sSelect((LARGE * rayInvDir.mInvDirection.Abs()).ToInt(), UVec4::sReplicate(LARGE), rayInvDir.mIsParallel);
 	Vec3 startPosF = (startPos - Vec3(startPosU.ToFloat())) * -step + Vec3::sMax(step, Vec3::sZero());
-	auto tMax = UVec4::sSelect((startPosF * Vec3(tDelta.ToFloat())).ToInt(),UVec4::sReplicate(LARGE), rayInvDir.mIsParallel);
+	auto tMax = UVec4::sSelect((startPosF * Vec3(tDelta.ToFloat())).ToInt(), UVec4::sReplicate(LARGE), rayInvDir.mIsParallel);
 
-	// step through vert grid and check attached vert stars(cell)
 	while (!xyz.is_invalid()) {
-		VisitStarT(ioVisitor, xyz.packed);
-		//if (ioVisitor.ShouldAbort()) {
-			//break;
-			//}
+		VisitCellOwners(qc, xyz.packed, visited, visit);
 		auto ax = tMax[0] < tMax[1] && tMax[0] < tMax[2] ? 0 : (tMax[1] < tMax[2] ? 1 : 2);
 		if (end_v3u4.packed == xyz.packed) {
 			break;
@@ -389,109 +321,40 @@ void CastRayT(Visitor &ioVisitor) {
 		xyz.try_add(ax, step[ax]);
 		tMax[ax] += tDelta[ax];
 	}
+	if (count != 0) {
+		flush();
+	}
 }
 
 bool QuadChunkShape::CastRay(const RayCast &inRay, const SubShapeIDCreator &inSubShapeIDCreator, RayCastResult &ioHit) const {
 	JPH_PROFILE_FUNCTION();
-
-	struct Visitor {
-		JPH_INLINE explicit Visitor(const QuadChunkShape *inShape, const RayCast &inRay, const SubShapeIDCreator &inSubShapeIDCreator, RayCastResult &ioHit) :
-				mHit(ioHit),
-				mRayOrigin(inRay.mOrigin),
-				mRayDirection(inRay.mDirection),
-				mRayInvDirection(inRay.mDirection),
-				mShape(inShape),
-				mSubShapeIDCreator(inSubShapeIDCreator) {}
-
-		JPH_INLINE bool ShouldAbort() const {
-			return mHit.mFraction <= 0.0f;
+	bool hit = false;
+	CastRayT(this, inRay.mOrigin, inRay.mDirection, EBackFaceMode::IgnoreBackFaces, [&](float inFraction, uint32_t inCell, uint32_t inTri) {
+		if (inFraction < ioHit.mFraction) {
+			ioHit.mFraction = inFraction;
+			ioHit.mSubShapeID2 = EncodeSubShapeID(inSubShapeIDCreator, inCell, inTri);
+			hit = true;
 		}
-
-		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
-			Vec3 verts[3];
-			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
-				return;
-			}
-			if (mBackFaceMode == EBackFaceMode::IgnoreBackFaces && (verts[2] - verts[0]).Cross(verts[1] - verts[0]).Dot(mRayDirection) < 0) {
-				return;
-			}
-			float fraction = RayTriangle(mRayOrigin, mRayDirection, verts[0], verts[1], verts[2]);
-			if (fraction < mHit.mFraction) {
-				mHit.mFraction = fraction;
-				mHit.mSubShapeID2 = mShape->EncodeSubShapeID(mSubShapeIDCreator, inHex, inTriangle);
-				mReturnValue = true;
-			}
-		}
-
-		RayCastResult &mHit;
-		Vec3 mRayOrigin;
-		Vec3 mRayDirection;
-		RayInvDirection mRayInvDirection;
-		const QuadChunkShape *mShape;
-		const SubShapeIDCreator &mSubShapeIDCreator;
-		EBackFaceMode mBackFaceMode = EBackFaceMode::IgnoreBackFaces;
-		bool mReturnValue = false;
-		float mDistanceStack[cStackSize];
-	};
-
-	Visitor visitor(this, inRay, inSubShapeIDCreator, ioHit);
-	CastRayT(visitor);
-
-	return visitor.mReturnValue;
+	});
+	return hit;
 }
 
 void QuadChunkShape::CastRay(const RayCast &inRay, const RayCastSettings &inRayCastSettings, const SubShapeIDCreator &inSubShapeIDCreator, CastRayCollector &ioCollector, const ShapeFilter &inShapeFilter) const {
 	JPH_PROFILE_FUNCTION();
 
-	// Test shape filter
 	if (!inShapeFilter.ShouldCollide(this, inSubShapeIDCreator.GetID())) {
 		return;
 	}
 
-	struct Visitor {
-		JPH_INLINE explicit Visitor(const QuadChunkShape *inShape, const RayCast &inRay, const SubShapeIDCreator &inSubShapeIDCreator, CastRayCollector &ioCollector) :
-				mRayOrigin(inRay.mOrigin),
-				mRayDirection(inRay.mDirection),
-				mShape(inShape),
-				mSubShapeIDCreator(inSubShapeIDCreator),
-				mCollector(ioCollector) {}
-		JPH_INLINE bool ShouldAbort() const {
-			return mCollector.ShouldEarlyOut();
+	CastRayT(this, inRay.mOrigin, inRay.mDirection, inRayCastSettings.mBackFaceModeTriangles, [&](float inFraction, uint32_t inCell, uint32_t inTri) {
+		if (inFraction < ioCollector.GetEarlyOutFraction()) {
+			RayCastResult hit;
+			hit.mBodyID = TransformedShape::sGetBodyID(ioCollector.GetContext());
+			hit.mFraction = inFraction;
+			hit.mSubShapeID2 = EncodeSubShapeID(inSubShapeIDCreator, inCell, inTri);
+			ioCollector.AddHit(hit);
 		}
-
-		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
-			Vec3 verts[3];
-			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
-				return;
-			}
-			// Back facing check
-			if (mBackFaceMode == EBackFaceMode::IgnoreBackFaces && (verts[2] - verts[0]).Cross(verts[1] - verts[0]).Dot(mRayDirection) < 0) {
-				return;
-			}
-
-			// Check the triangle
-			float fraction = RayTriangle(mRayOrigin, mRayDirection, verts[0], verts[1], verts[2]);
-			if (fraction < mCollector.GetEarlyOutFraction()) {
-				RayCastResult hit;
-
-				hit.mBodyID = TransformedShape::sGetBodyID(mCollector.GetContext());
-				hit.mFraction = fraction;
-				hit.mSubShapeID2 = mShape->EncodeSubShapeID(mSubShapeIDCreator, inHex, inTriangle);
-				mCollector.AddHit(hit);
-			}
-		}
-
-		Vec3 mRayOrigin;
-		Vec3 mRayDirection;
-		const QuadChunkShape *mShape;
-		const SubShapeIDCreator &mSubShapeIDCreator;
-		CastRayCollector &mCollector;
-		EBackFaceMode mBackFaceMode;
-	};
-
-	Visitor visitor(this, inRay, inSubShapeIDCreator, ioCollector);
-	visitor.mBackFaceMode = inRayCastSettings.mBackFaceModeTriangles;
-	CastRayT(visitor);
+	});
 }
 
 void QuadChunkShape::CollidePoint(Vec3Arg inPoint, const SubShapeIDCreator &inSubShapeIDCreator, CollidePointCollector &ioCollector, const ShapeFilter &inShapeFilter) const {
@@ -502,34 +365,13 @@ void QuadChunkShape::CollideSoftBodyVertices(Mat44Arg inCenterOfMassTransform, V
 	JPH_PROFILE_FUNCTION();
 
 	struct Visitor : public CollideSoftBodyVerticesVsTriangles {
-		using CollideSoftBodyVerticesVsTriangles::CollideSoftBodyVerticesVsTriangles;
 		JPH_INLINE explicit Visitor(const QuadChunkShape *inShape, Mat44Arg inCOM, Vec3Arg inScale) :
 				CollideSoftBodyVerticesVsTriangles(inCOM, inScale), mShape(inShape) {}
 
 		JPH_INLINE bool ShouldAbort() const {
 			return false;
 		}
-		JPH_INLINE bool ShouldVisitRangeBlock([[maybe_unused]] int32_t inStackTop) const {
-			return mDistanceStack[inStackTop] < mClosestDistanceSq;
-		}
 
-		JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], int32_t inStackTop) {
-			// Get distance to vertex
-			Vec4 dist_sq0 = AABox4DistanceSqToPoint(mLocalPosition,
-					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2));
-			Vec4 dist_sq1 = AABox4DistanceSqToPoint(mLocalPosition,
-					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2));
-
-			float dist_sq[8]{
-				dist_sq0.GetX(), dist_sq0.GetY(), dist_sq0.GetZ(), dist_sq0.GetW(),
-				dist_sq1.GetX(), dist_sq1.GetY(), dist_sq1.GetZ(), dist_sq1.GetW()
-			};
-
-			// Sort so that highest values are first (we want to first process closer hits and we process stack top to bottom)
-			return SortReverseAndStore8(dist_sq, mClosestDistanceSq, ioProperties, &mDistanceStack[inStackTop]);
-		}
 		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
 			Vec3 verts[3];
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
@@ -539,7 +381,6 @@ void QuadChunkShape::CollideSoftBodyVertices(Mat44Arg inCenterOfMassTransform, V
 		}
 
 		const QuadChunkShape *mShape;
-		float mDistanceStack[cStackSize];
 	};
 
 	Visitor visitor(this, inCenterOfMassTransform, inScale);
@@ -547,8 +388,7 @@ void QuadChunkShape::CollideSoftBodyVertices(Mat44Arg inCenterOfMassTransform, V
 	for (CollideSoftBodyVertexIterator v = inVertices, sbv_end = inVertices + inNumVertices; v != sbv_end; ++v) {
 		if (v.GetInvMass() > 0.0f) {
 			visitor.StartVertex(v);
-			auto ctx = DecodingContext();
-			ctx.WalkQuads(visitor);
+			WalkBox(mQuadChunk, sChunkBox(), visitor);
 			visitor.FinishVertex(v, inCollidingShapeIndex);
 		}
 	}
@@ -557,73 +397,37 @@ void QuadChunkShape::CollideSoftBodyVertices(Mat44Arg inCenterOfMassTransform, V
 struct QuadChunkShape::QSGetTrianglesContext {
 	JPH_INLINE QSGetTrianglesContext(const QuadChunkShape *inShape, const AABox &inBox, Vec3Arg inPositionCOM, QuatArg inRotation, Vec3Arg inScale) :
 			mShape(inShape),
-			mLocalBox(Mat44::sInverseRotationTranslation(inRotation, inPositionCOM), inBox),
-			mChunkScale(inScale),
-			mLocalToWorld(Mat44::sRotationTranslation(inRotation, inPositionCOM) * Mat44::sScale(inScale)),
-			mIsInsideOut(ScaleHelpers::IsInsideOut(inScale)) {}
-	bool ShouldAbort() const {
-		return mShouldAbort;
+			mLocalToWorld(Mat44::sRotationTranslation(inRotation, inPositionCOM) * Mat44::sScale(inScale)) {
+		OrientedBox local_box(Mat44::sInverseRotationTranslation(inRotation, inPositionCOM), inBox);
+		AABox local_aabb = AABox(-local_box.mHalfExtents, local_box.mHalfExtents).Transformed(local_box.mOrientation);
+		mCursor = FaceCursor(local_aabb.Scaled(inScale.Reciprocal()));
 	}
 
-	bool ShouldVisitRangeBlock([[maybe_unused]] int32_t inTop) const {
-		// Always visit all blocks
-		return true;
+	JPH_INLINE bool ShouldAbort() const {
+		return mNumTrianglesFound + 2 > mMaxTrianglesRequested;
 	}
 
-	JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], int32_t inStackTop) {
-		// Scale the bounding boxes of this node
-		Vec4 bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z;
-		AABox4Scale(mChunkScale,
-				inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-				inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2),
-				bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-		// Test which nodes collide
-		UVec4 collides0 = AABox4VsBox(mLocalBox, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-		AABox4Scale(mChunkScale,
-				inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-				inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2),
-				bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-		UVec4 collides1 = AABox4VsBox(mLocalBox, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-		uint32_t collides[8] = {
-			collides0.GetX(), collides0.GetY(), collides0.GetZ(), collides0.GetW(),
-			collides1.GetX(), collides1.GetY(), collides1.GetZ(), collides1.GetW()
-		};
-
-		return CountAndSortTrues8(collides, ioProperties);
-	}
-
-	void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
-		// When the buffer is full and we cannot process the triangles, abort the height field walk. The next time GetTrianglesNext is called we will continue here.
-		if (mNumTrianglesFound + 1 > mMaxTrianglesRequested) {
-			mShouldAbort = true;
-			return;
-		}
-
+	JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
 		Vec3 verts[3];
-		if(mShape->DecodeTriangle(inHex, inTriangle, verts)) {
+		if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 			return;
 		}
-		// Reverse vertices
 		(mLocalToWorld * verts[0]).StoreFloat3(mTriangleVertices++);
 		(mLocalToWorld * verts[1]).StoreFloat3(mTriangleVertices++);
 		(mLocalToWorld * verts[2]).StoreFloat3(mTriangleVertices++);
-
-		// Accumulate triangles found
+		if (mMaterials != nullptr) {
+			*mMaterials++ = PhysicsMaterial::sDefault;
+		}
 		mNumTrianglesFound++;
 	}
 
-	DecodingContext mDecodeCtx;
+	FaceCursor mCursor;
 	const QuadChunkShape *mShape;
-	OrientedBox mLocalBox;
-	Vec3 mChunkScale;
 	Mat44 mLocalToWorld;
-	int32_t mMaxTrianglesRequested;
-	Float3 *mTriangleVertices;
-	int32_t mNumTrianglesFound;
-	const PhysicsMaterial **mMaterials;
-	bool mShouldAbort;
-	bool mIsInsideOut;
+	int32_t mMaxTrianglesRequested = 0;
+	Float3 *mTriangleVertices = nullptr;
+	int32_t mNumTrianglesFound = 0;
+	const PhysicsMaterial **mMaterials = nullptr;
 };
 
 void QuadChunkShape::GetTrianglesStart(GetTrianglesContext &ioContext, const AABox &inBox, Vec3Arg inPositionCOM, QuatArg inRotation, Vec3Arg inScale) const {
@@ -631,21 +435,22 @@ void QuadChunkShape::GetTrianglesStart(GetTrianglesContext &ioContext, const AAB
 	JPH_ASSERT(IsAligned(&ioContext, alignof(QSGetTrianglesContext)));
 	new (&ioContext) QSGetTrianglesContext(this, inBox, inPositionCOM, inRotation, inScale);
 }
+
 int32_t QuadChunkShape::GetTrianglesNext(GetTrianglesContext &ioContext, int32_t inMaxTrianglesRequested, Float3 *outTriangleVertices, const PhysicsMaterial **outMaterials) const {
+	RWLockRead guard(mQuadChunk->lock_);
 	JPH_ASSERT(inMaxTrianglesRequested >= cGetTrianglesMinTrianglesRequested);
 
 	QSGetTrianglesContext &context = (QSGetTrianglesContext &)ioContext;
-	if (context.mDecodeCtx.IsDoneWalking()) {
+	if (context.mCursor.IsDone()) {
 		return 0;
 	}
 
 	context.mMaxTrianglesRequested = inMaxTrianglesRequested;
 	context.mTriangleVertices = outTriangleVertices;
 	context.mMaterials = outMaterials;
-	context.mShouldAbort = false;
 	context.mNumTrianglesFound = 0;
 
-	context.mDecodeCtx.WalkQuads(context);
+	context.mCursor.Walk(mQuadChunk, context);
 	return context.mNumTrianglesFound;
 }
 
@@ -660,8 +465,8 @@ void QuadChunkShape::RestoreMaterialState(const PhysicsMaterialRefC *inMaterials
 Shape::Stats QuadChunkShape::GetStats() const {
 	return Stats(sizeof(*this), mQuadChunk->count_ * 2);
 }
+
 uint8 QuadChunkShape::GetEdgeFlags(uint32_t inHex, uint32_t inTriangle) const {
-	// Dummy implementation - return all edges active
 	return 0b111;
 }
 
@@ -676,38 +481,12 @@ void QuadChunkShape::sCollideConvexVsQuadChunk(const Shape *inShape1, const Shap
 	struct Visitor : public CollideConvexVsTriangles {
 		using CollideConvexVsTriangles::CollideConvexVsTriangles;
 
+		JPH_INLINE AABox LocalBox() const {
+			return mBoundsOf1InSpaceOf2;
+		}
+
 		JPH_INLINE bool ShouldAbort() const {
 			return mCollector.ShouldEarlyOut();
-		}
-
-		JPH_INLINE bool ShouldVisitRangeBlock([[maybe_unused]] int inStackTop) const {
-			return true;
-		}
-
-		JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], [[maybe_unused]] int inStackTop) {
-			// First batch: process inBoundsMin0/inBoundsMax0
-			Vec4 bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z;
-			AABox4Scale(mScale2,
-					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			UVec4 collides0 = AABox4VsBox(mBoundsOf1InSpaceOf2, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			// Second batch: process inBoundsMin1/inBoundsMax1
-			AABox4Scale(mScale2,
-					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			UVec4 collides1 = AABox4VsBox(mBoundsOf1InSpaceOf2, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			uint32_t collides[8] = {
-				collides0.GetX(), collides0.GetY(), collides0.GetZ(), collides0.GetW(),
-				collides1.GetX(), collides1.GetY(), collides1.GetZ(), collides1.GetW()
-			};
-
-			return CountAndSortTrues8(collides, ioProperties);
 		}
 
 		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
@@ -715,10 +494,7 @@ void QuadChunkShape::sCollideConvexVsQuadChunk(const Shape *inShape1, const Shap
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 				return;
 			}
-			SubShapeID quad_sub_shape_id = mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle);
-			uint8 active_edges = mShape->GetEdgeFlags(inHex, inTriangle);
-
-			Collide(verts[0], verts[1], verts[2], active_edges, quad_sub_shape_id);
+			Collide(verts[0], verts[1], verts[2], mShape->GetEdgeFlags(inHex, inTriangle), mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle));
 		}
 
 		const QuadChunkShape *mShape;
@@ -728,8 +504,7 @@ void QuadChunkShape::sCollideConvexVsQuadChunk(const Shape *inShape1, const Shap
 	Visitor visitor(shape1, inScale1, inScale2, inCenterOfMassTransform1, inCenterOfMassTransform2, inSubShapeIDCreator1.GetID(), inCollideShapeSettings, ioCollector);
 	visitor.mShape = shape2;
 	visitor.mSubShapeIDCreator2 = inSubShapeIDCreator2;
-	auto ctx = DecodingContext();
-	ctx.WalkQuads(visitor);
+	WalkBox(shape2->mQuadChunk, visitor.LocalBox().Scaled(inScale2.Reciprocal()), visitor);
 }
 
 void QuadChunkShape::sCollideSphereVsQuadChunk(const Shape *inShape1, const Shape *inShape2, Vec3Arg inScale1, Vec3Arg inScale2, Mat44Arg inCenterOfMassTransform1, Mat44Arg inCenterOfMassTransform2, const SubShapeIDCreator &inSubShapeIDCreator1, const SubShapeIDCreator &inSubShapeIDCreator2, const CollideShapeSettings &inCollideShapeSettings, CollideShapeCollector &ioCollector, const ShapeFilter &inShapeFilter) {
@@ -743,38 +518,13 @@ void QuadChunkShape::sCollideSphereVsQuadChunk(const Shape *inShape1, const Shap
 	struct Visitor : public CollideSphereVsTriangles {
 		using CollideSphereVsTriangles::CollideSphereVsTriangles;
 
+		JPH_INLINE AABox LocalBox() const {
+			Vec3 reach = Vec3::sReplicate(sqrtf(mRadiusPlusMaxSeparationSq));
+			return AABox(mSphereCenterIn2 - reach, mSphereCenterIn2 + reach);
+		}
+
 		JPH_INLINE bool ShouldAbort() const {
 			return mCollector.ShouldEarlyOut();
-		}
-
-		JPH_INLINE bool ShouldVisitRangeBlock([[maybe_unused]] int inStackTop) const {
-			return true;
-		}
-
-		JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], [[maybe_unused]] int inStackTop) {
-			// First batch: process inBoundsMin0/inBoundsMax0
-			Vec4 bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z;
-			AABox4Scale(mScale2,
-					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			UVec4 collides0 = AABox4VsSphere(mSphereCenterIn2, mRadiusPlusMaxSeparationSq, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			// Second batch: process inBoundsMin1/inBoundsMax1
-			AABox4Scale(mScale2,
-					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			UVec4 collides1 = AABox4VsSphere(mSphereCenterIn2, mRadiusPlusMaxSeparationSq, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			uint32_t collides[8] = {
-				collides0.GetX(), collides0.GetY(), collides0.GetZ(), collides0.GetW(),
-				collides1.GetX(), collides1.GetY(), collides1.GetZ(), collides1.GetW()
-			};
-
-			return CountAndSortTrues8(collides, ioProperties);
 		}
 
 		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
@@ -782,10 +532,7 @@ void QuadChunkShape::sCollideSphereVsQuadChunk(const Shape *inShape1, const Shap
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 				return;
 			}
-			SubShapeID quad_sub_shape_id = mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle);
-			uint8 active_edges = mShape->GetEdgeFlags(inHex, inTriangle);
-
-			Collide(verts[0], verts[1], verts[2], active_edges, quad_sub_shape_id);
+			Collide(verts[0], verts[1], verts[2], mShape->GetEdgeFlags(inHex, inTriangle), mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle));
 		}
 
 		const QuadChunkShape *mShape;
@@ -795,8 +542,7 @@ void QuadChunkShape::sCollideSphereVsQuadChunk(const Shape *inShape1, const Shap
 	Visitor visitor(shape1, inScale1, inScale2, inCenterOfMassTransform1, inCenterOfMassTransform2, inSubShapeIDCreator1.GetID(), inCollideShapeSettings, ioCollector);
 	visitor.mShape = shape2;
 	visitor.mSubShapeIDCreator2 = inSubShapeIDCreator2;
-	auto ctx = DecodingContext();
-	ctx.WalkQuads(visitor);
+	WalkBox(shape2->mQuadChunk, visitor.LocalBox().Scaled(inScale2.Reciprocal()), visitor);
 }
 
 void QuadChunkShape::sCastConvexVsQuadChunk(const ShapeCast &inShapeCast, const ShapeCastSettings &inShapeCastSettings, const Shape *inShape, Vec3Arg inScale, const ShapeFilter &inShapeFilter, Mat44Arg inCenterOfMassTransform2, const SubShapeIDCreator &inSubShapeIDCreator1, const SubShapeIDCreator &inSubShapeIDCreator2, CastShapeCollector &ioCollector) {
@@ -812,67 +558,24 @@ void QuadChunkShape::sCastConvexVsQuadChunk(const ShapeCast &inShapeCast, const 
 			return mCollector.ShouldEarlyOut();
 		}
 
-		JPH_INLINE bool ShouldVisitRangeBlock(int inStackTop) const {
-			return mDistanceStack[inStackTop] < mCollector.GetPositiveEarlyOutFraction();
-		}
-
-		JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], int inStackTop) {
-			// First batch: process inBoundsMin0/inBoundsMax0
-			Vec4 bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z;
-			AABox4Scale(mScale,
-					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			AABox4EnlargeWithExtent(mScale, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			Vec4 distance0 = RayAABox4(mBoxCenter, mInvDirection, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			// Second batch: process inBoundsMin1/inBoundsMax1
-			AABox4Scale(mScale,
-					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			AABox4EnlargeWithExtent(mScale, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			Vec4 distance1 = RayAABox4(mBoxCenter, mInvDirection, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			float distances[8] = {
-				distance0.GetX(), distance0.GetY(), distance0.GetZ(), distance0.GetW(),
-				distance1.GetX(), distance1.GetY(), distance1.GetZ(), distance1.GetW()
-			};
-
-			return SortReverseAndStore8(distances, mCollector.GetPositiveEarlyOutFraction(), ioProperties, &mDistanceStack[inStackTop]);
-		}
-
 		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
 			Vec3 verts[3];
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 				return;
 			}
-			SubShapeID quad_sub_shape_id = mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle);
-			uint8 active_edges = mShape->GetEdgeFlags(inHex, inTriangle);
-
-			Cast(verts[0], verts[1], verts[2], active_edges, quad_sub_shape_id);
+			Cast(verts[0], verts[1], verts[2], mShape->GetEdgeFlags(inHex, inTriangle), mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle));
 		}
 
 		const QuadChunkShape *mShape;
-		RayInvDirection mInvDirection;
-		Vec3 mBoxCenter;
-		Vec3 mBoxExtent;
 		SubShapeIDCreator mSubShapeIDCreator2;
-		float mDistanceStack[cStackSize];
 	};
 
 	Visitor visitor(inShapeCast, inShapeCastSettings, inScale, inCenterOfMassTransform2, inSubShapeIDCreator1, ioCollector);
 	visitor.mShape = shape;
-	visitor.mInvDirection.Set(inShapeCast.mDirection);
-	visitor.mBoxCenter = inShapeCast.mShapeWorldBounds.GetCenter();
-	visitor.mBoxExtent = inShapeCast.mShapeWorldBounds.GetExtent();
 	visitor.mSubShapeIDCreator2 = inSubShapeIDCreator2;
-	auto ctx = DecodingContext();
-	ctx.WalkQuads(visitor);
+	AABox swept = inShapeCast.mShapeWorldBounds;
+	swept.Encapsulate(AABox(swept.mMin + inShapeCast.mDirection, swept.mMax + inShapeCast.mDirection));
+	WalkBox(shape->mQuadChunk, swept.Scaled(inScale.Reciprocal()), visitor);
 }
 
 void QuadChunkShape::sCastSphereVsQuadChunk(const ShapeCast &inShapeCast, const ShapeCastSettings &inShapeCastSettings, const Shape *inShape, Vec3Arg inScale, const ShapeFilter &inShapeFilter, Mat44Arg inCenterOfMassTransform2, const SubShapeIDCreator &inSubShapeIDCreator1, const SubShapeIDCreator &inSubShapeIDCreator2, CastShapeCollector &ioCollector) {
@@ -884,42 +587,15 @@ void QuadChunkShape::sCastSphereVsQuadChunk(const ShapeCast &inShapeCast, const 
 	struct Visitor : public CastSphereVsTriangles {
 		using CastSphereVsTriangles::CastSphereVsTriangles;
 
+		JPH_INLINE AABox LocalBox() const {
+			Vec3 r = Vec3::sReplicate(mRadius);
+			AABox swept(mStart - r, mStart + r);
+			swept.Encapsulate(AABox(mStart + mDirection - r, mStart + mDirection + r));
+			return swept;
+		}
+
 		JPH_INLINE bool ShouldAbort() const {
 			return mCollector.ShouldEarlyOut();
-		}
-
-		JPH_INLINE bool ShouldVisitRangeBlock(int inStackTop) const {
-			return mDistanceStack[inStackTop] < mCollector.GetPositiveEarlyOutFraction();
-		}
-
-		JPH_INLINE int32_t VisitRangeBlock(const Mat44 &inBoundsMin0, const Mat44 &inBoundsMax0, const Mat44 &inBoundsMin1, const Mat44 &inBoundsMax1, uint32_t ioProperties[8], int inStackTop) {
-			// First batch: process inBoundsMin0/inBoundsMax0
-			Vec4 bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z;
-			AABox4Scale(mScale,
-					inBoundsMin0.GetColumn4(0), inBoundsMin0.GetColumn4(1), inBoundsMin0.GetColumn4(2),
-					inBoundsMax0.GetColumn4(0), inBoundsMax0.GetColumn4(1), inBoundsMax0.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			AABox4EnlargeWithExtent(Vec3::sReplicate(mRadius), bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			Vec4 distance0 = RayAABox4(mStart, mInvDirection, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			// Second batch: process inBoundsMin1/inBoundsMax1
-			AABox4Scale(mScale,
-					inBoundsMin1.GetColumn4(0), inBoundsMin1.GetColumn4(1), inBoundsMin1.GetColumn4(2),
-					inBoundsMax1.GetColumn4(0), inBoundsMax1.GetColumn4(1), inBoundsMax1.GetColumn4(2),
-					bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			AABox4EnlargeWithExtent(Vec3::sReplicate(mRadius), bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			Vec4 distance1 = RayAABox4(mStart, mInvDirection, bounds_min_x, bounds_min_y, bounds_min_z, bounds_max_x, bounds_max_y, bounds_max_z);
-
-			float distances[8] = {
-				distance0.GetX(), distance0.GetY(), distance0.GetZ(), distance0.GetW(),
-				distance1.GetX(), distance1.GetY(), distance1.GetZ(), distance1.GetW()
-			};
-
-			return SortReverseAndStore8(distances, mCollector.GetPositiveEarlyOutFraction(), ioProperties, &mDistanceStack[inStackTop]);
 		}
 
 		JPH_INLINE void VisitTriangle(uint32_t inHex, uint32_t inTriangle) {
@@ -927,25 +603,19 @@ void QuadChunkShape::sCastSphereVsQuadChunk(const ShapeCast &inShapeCast, const 
 			if (mShape->DecodeTriangle(inHex, inTriangle, verts)) {
 				return;
 			}
-			SubShapeID quad_sub_shape_id = mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle);
-			uint8 active_edges = mShape->GetEdgeFlags(inHex, inTriangle);
-
-			Cast(verts[0], verts[1], verts[2], active_edges, quad_sub_shape_id);
+			Cast(verts[0], verts[1], verts[2], mShape->GetEdgeFlags(inHex, inTriangle), mShape->EncodeSubShapeID(mSubShapeIDCreator2, inHex, inTriangle));
 		}
 
 		const QuadChunkShape *mShape;
-		RayInvDirection mInvDirection;
 		SubShapeIDCreator mSubShapeIDCreator2;
-		float mDistanceStack[cStackSize];
 	};
 
 	Visitor visitor(inShapeCast, inShapeCastSettings, inScale, inCenterOfMassTransform2, inSubShapeIDCreator1, ioCollector);
 	visitor.mShape = shape;
-	visitor.mInvDirection.Set(inShapeCast.mDirection);
 	visitor.mSubShapeIDCreator2 = inSubShapeIDCreator2;
-	auto ctx = DecodingContext();
-	ctx.WalkQuads(visitor);
+	WalkBox(shape->mQuadChunk, visitor.LocalBox().Scaled(inScale.Reciprocal()), visitor);
 }
+
 void QuadChunkShape::sRegister() {
 	ShapeFunctions &f = ShapeFunctions::sGet(EShapeSubType::Mesh);
 	f.mConstruct = []() -> Shape * { return new QuadChunkShape; };
@@ -959,7 +629,6 @@ void QuadChunkShape::sRegister() {
 		CollisionDispatch::sRegisterCollideShape(EShapeSubType::User3, s, CollisionDispatch::sReversedCollideShape);
 	}
 
-	// Specialized collision functions
 	CollisionDispatch::sRegisterCollideShape(EShapeSubType::Sphere, EShapeSubType::User3, sCollideSphereVsQuadChunk);
 	CollisionDispatch::sRegisterCastShape(EShapeSubType::Sphere, EShapeSubType::User3, sCastSphereVsQuadChunk);
 }

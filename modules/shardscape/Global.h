@@ -13,6 +13,7 @@ public:
         PROPERTY_SHARP        = 1 << 8,
         PROPERTY_LIQUID       = 1 << 10,
         PROPERTY_GAS          = 1 << 11,
+        PROPERTY_CUTOUT       = 1 << 13,
     };
 	LocalVector<int32_t> block_props;
 	RID buffer_;
@@ -21,6 +22,7 @@ public:
 	int32_t get_block_props(int32_t) const;
 	static Global *singleton;
 	static Global *get_singleton();
+	~Global();
 };
 }
 VARIANT_ENUM_CAST(SSK::Global::Property);

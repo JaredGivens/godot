@@ -1,4 +1,8 @@
 #include "ieos.h"
+#ifdef ANDROID_ENABLED
+#include "Android/eos_Android.h"
+#include "core/os/os.h"
+#endif
 
 bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
     CharString productId = VARIANT_TO_CHARSTRING(p_options->get("product_id"));
@@ -783,8 +787,16 @@ int IEOS::platform_interface_initialize(Ref<RefCounted> p_options) {
     initOptions.ReallocateMemoryFunction = nullptr;
     initOptions.ReleaseMemoryFunction = nullptr;
     initOptions.Reserved = nullptr;
-    // TODO: Implement EOS_Android_InitializeOptions for Android
     initOptions.SystemInitializeOptions = nullptr;
+#ifdef ANDROID_ENABLED
+    CharString userDir = OS::get_singleton()->get_user_data_dir().utf8();
+    EOS_Android_InitializeOptions androidOptions;
+    memset(&androidOptions, 0, sizeof(androidOptions));
+    androidOptions.ApiVersion = EOS_ANDROID_INITIALIZEOPTIONS_API_LATEST;
+    androidOptions.OptionalInternalDirectory = userDir.get_data();
+    androidOptions.OptionalExternalDirectory = userDir.get_data();
+    initOptions.SystemInitializeOptions = &androidOptions;
+#endif
     initOptions.OverrideThreadAffinity = nullptr;
 
     EOS_EResult res = EOS_Initialize(&initOptions);

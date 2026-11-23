@@ -39,6 +39,10 @@
 #include "main/main.h"
 #include "servers/display/display_server.h"
 
+#ifdef UNIX_ENABLED
+#include <csignal>
+#endif
+
 EditorRun::Status EditorRun::get_status() const {
 	return status;
 }
@@ -219,8 +223,25 @@ void EditorRun::stop_child_process(OS::ProcessID p_pid) {
 
 void EditorRun::stop() {
 	if (status != STATUS_STOP && pids.size() > 0) {
+#ifdef UNIX_ENABLED
 		for (const OS::ProcessID &E : pids) {
-			OS::get_singleton()->kill(E);
+			::kill(E, SIGTERM);
+		}
+		for (int i = 0; i < 100; i++) {
+			bool running = false;
+			for (const OS::ProcessID &E : pids) {
+				running = running || OS::get_singleton()->is_process_running(E);
+			}
+			if (!running) {
+				break;
+			}
+			OS::get_singleton()->delay_usec(50000);
+		}
+#endif
+		for (const OS::ProcessID &E : pids) {
+			if (OS::get_singleton()->is_process_running(E)) {
+				OS::get_singleton()->kill(E);
+			}
 		}
 		pids.clear();
 	}

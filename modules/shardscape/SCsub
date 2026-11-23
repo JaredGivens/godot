@@ -15,6 +15,9 @@ is_debug = env['debug_symbols']
 
 fndir = '#../FastNoise2/build/Debug/Debug/lib/' if is_debug else '#../FastNoise2/build/Release/Release/lib/'
 fnlib = 'FastNoiseD' if is_debug else 'FastNoise'
+if env['platform'] == 'android':
+    fndir = '#../FastNoise2/build/Android/src/'
+    fnlib = 'FastNoise'
 # Define the path to the static library
 env.Append(LIBS=[fnlib])  # name without the 'lib' prefix or '.a'
 env.Append(LIBPATH=[fndir])  # where libmylib.a is

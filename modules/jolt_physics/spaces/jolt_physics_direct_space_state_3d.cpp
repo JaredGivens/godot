@@ -503,11 +503,6 @@ bool JoltPhysicsDirectSpaceState3D::intersect_ray(const RayParameters &p_paramet
 
 	if (!p_parameters.hit_from_inside || hit.mFraction > 0.0f) {
 		normal = object->get_jolt_body()->GetWorldSpaceSurfaceNormal(sub_shape_id, position);
-
-		// If we got a back-face normal we need to flip it.
-		if (normal.Dot(vector) > 0) {
-			normal = -normal;
-		}
 	}
 
 	r_result.position = to_godot(position);

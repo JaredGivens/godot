@@ -26,7 +26,7 @@ if platform == "windows":
 
 elif platform == "linuxbsd":
     # Linux needs the rpath flags to find the .so at runtime, and the shipping version of the SDK
-    env.Append(LINKFLAGS=["-Wl,-rpath,'$$ORIGIN'", "-Wl,--enable-new-dtags"])
+    env.Append(LINKFLAGS=[r"-Wl,-rpath,\$$ORIGIN", "-Wl,--enable-new-dtags"])
     env.Append(LIBPATH=[eos_sdk_folder + "Bin/"])
     if env["arch"] == "arm64":
         env.Append(LIBS=["EOSSDK-LinuxArm64-Shipping"])

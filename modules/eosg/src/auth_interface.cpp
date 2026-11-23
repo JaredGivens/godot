@@ -38,7 +38,6 @@ void IEOS::auth_interface_login(Ref<RefCounted> p_options) {
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["pin_grant_info"] = eosg_auth_pin_grant_info_to_dict(data->PinGrantInfo);
         ret["continuance_token"] = eosg_continuance_token_to_wrapper(data->ContinuanceToken);
-        ret["selected_account_id"] = eosg_epic_account_id_to_string(data->SelectedAccountId);
 
         if (data->ResultCode == EOS_EResult::EOS_Success) {
             ret["pending"] = false;
@@ -268,7 +267,6 @@ void IEOS::auth_interface_link_account(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["pin_grant_info"] = eosg_auth_pin_grant_info_to_dict(data->PinGrantInfo);
-        ret["selected_account_id"] = eosg_epic_account_id_to_string(data->SelectedAccountId);
         IEOS::get_singleton()->emit_signal("auth_interface_link_account_callback", ret);
     });
 }

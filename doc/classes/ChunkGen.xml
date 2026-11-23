@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ChunkGen" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_ecology">
+			<return type="int" />
+			<param index="0" name="layer" type="int" />
+			<param index="1" name="band" type="int" />
+			<param index="2" name="weight" type="float" />
+			<param index="3" name="block_bids" type="PackedInt32Array" />
+			<param index="4" name="block_depths" type="PackedFloat32Array" />
+			<param index="5" name="road_bid" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="add_ecology_feature">
+			<return type="void" />
+			<param index="0" name="layer" type="int" />
+			<param index="1" name="band" type="int" />
+			<param index="2" name="eco_index" type="int" />
+			<param index="3" name="pattern" type="int" />
+			<param index="4" name="usage" type="int" />
+			<param index="5" name="block_bid" type="int" />
+			<param index="6" name="threshold" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="add_topology">
+			<return type="void" />
+			<param index="0" name="layer" type="int" />
+			<param index="1" name="weight" type="float" />
+			<param index="2" name="encoded_detail" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="generate" qualifiers="const">
+			<return type="void" />
+			<param index="0" name="cells_addr" type="int" />
+			<param index="1" name="palette_bids_addr" type="int" />
+			<param index="2" name="palette_counts_addr" type="int" />
+			<param index="3" name="noise3_addr" type="int" />
+			<param index="4" name="flatten_addr" type="int" />
+			<param index="5" name="chunk_i" type="Vector3i" />
+			<param index="6" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_fixed_noise">
+			<return type="void" />
+			<param index="0" name="palette_biome" type="String" />
+			<param index="1" name="topology_biome" type="String" />
+			<param index="2" name="topology_mask" type="String" />
+			<param index="3" name="topology_base" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="set_layout">
+			<return type="void" />
+			<param index="0" name="layer_chunks" type="int" />
+			<param index="1" name="layer_types" type="int" />
+			<param index="2" name="surface_local_y" type="int" />
+			<param index="3" name="carve_amp" type="float" />
+			<param index="4" name="magma_local_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_pattern_noise">
+			<return type="void" />
+			<param index="0" name="index" type="int" />
+			<param index="1" name="encoded" type="String" />
+			<param index="2" name="frequency" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_road">
+			<return type="void" />
+			<param index="0" name="mask_threshold" type="float" />
+			<param index="1" name="depth" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="surface_ecology" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="world_x" type="int" />
+			<param index="1" name="world_z" type="int" />
+			<param index="2" name="level" type="int" />
+			<param index="3" name="seed" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="surface_height" qualifiers="const">
+			<return type="int" />
+			<param index="0" name="world_x" type="int" />
+			<param index="1" name="world_z" type="int" />
+			<param index="2" name="level" type="int" />
+			<param index="3" name="seed" type="int" />
+			<param index="4" name="flatten" type="float" />
+			<param index="5" name="flatten_y" type="int" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

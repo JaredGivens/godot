@@ -117,6 +117,15 @@ abstract class GodotActivity : FragmentActivity(), GodotHost {
 
 		super.onCreate(savedInstanceState)
 
+		try {
+			System.loadLibrary("EOSSDK")
+			Class.forName("com.epicgames.mobile.eossdk.EOSSDK")
+				.getMethod("init", android.app.Activity::class.java)
+				.invoke(null, this)
+		} catch (e: Throwable) {
+			Log.w(TAG, "EOS SDK unavailable: $e")
+		}
+
 		setContentView(getGodotAppLayout())
 
 		handleStartIntent(intent, true)

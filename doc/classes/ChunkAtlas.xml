@@ -7,6 +7,26 @@
 	<tutorials>
 	</tutorials>
 	<methods>
+		<method name="get_cell_buffer" qualifiers="const">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
+		<method name="get_count_buffer" qualifiers="const">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
+		<method name="get_counts" qualifiers="const">
+			<return type="PackedInt32Array" />
+			<description>
+			</description>
+		</method>
+		<method name="get_rank_buffer" qualifiers="const">
+			<return type="RID" />
+			<description>
+			</description>
+		</method>
 		<method name="get_texture" qualifiers="const">
 			<return type="RID" />
 			<description>
@@ -21,11 +41,11 @@
 		</method>
 	</methods>
 	<constants>
-		<constant name="SIZE_1D" value="16">
+		<constant name="SIZE_1D" value="8">
 		</constant>
-		<constant name="SIZE_2D" value="256">
+		<constant name="SIZE_2D" value="64">
 		</constant>
-		<constant name="SIZE_3D" value="4096">
+		<constant name="SIZE_3D" value="512">
 		</constant>
 	</constants>
 </class>

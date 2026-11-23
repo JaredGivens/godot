@@ -5,6 +5,7 @@
 #include "FastNoise.h"
 #include "ChunkAtlas.h"
 #include "QuadChunk16.h"
+#include "ChunkGen.h"
 #include "Global.h"
 
 #include <core/object/class_db.h>
@@ -16,6 +17,7 @@ void initialize_shardscape_module(ModuleInitializationLevel p_level) {
 	}
 	ClassDB::register_class<SSK::QuadChunk16>();
 	ClassDB::register_class<SSK::ChunkAtlas>();
+	ClassDB::register_class<SSK::ChunkGen>();
 	//ClassDB::register_class<SSK::QuadChunk<4>>();
 	ClassDB::register_class<SSK::FastNoise>();
 	SSK::Global::singleton = memnew(SSK::Global);
@@ -27,5 +29,8 @@ void uninitialize_shardscape_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	// Nothing to do here in this example.
+	if (SSK::Global::singleton != nullptr) {
+		memdelete(SSK::Global::singleton);
+		SSK::Global::singleton = nullptr;
+	}
 }
